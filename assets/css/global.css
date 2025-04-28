@@ -108,3 +108,6 @@ input[type='range']::-ms-thumb {
   cursor: pointer;
 }
 
+img{
+    object-position: top;
+}
