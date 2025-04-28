@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write Your Script</title>
+  <meta name="description" content="Your Number 1 Video Dual App - Write Your Script">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <style>
+   /* Reset default browser styles */
+   button, a, h1, h2, h3, h4, h5, h6, input, ul, ol {
+      all: unset;
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button {
+      cursor: pointer;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: normal;
+      font-size: inherit;
+    }
+
+    /* Main container */
+    .main-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: #261148;
+      width: 315px;
+      height: 100vh;
+      transition: all 0.3s ease-in-out;
+      border-right: 4px solid rgba(20, 9, 38, 0.1);
+      display: flex;
+      flex-direction: column;
+      font-weight: 500;
+      font-size: 16px;
+      position: sticky;
+      left: 0;
+      top: 0;
+      z-index: 30;
+    }
+    .sidebar-logo {
+      padding: 41px 24px;
+      margin-bottom: 20px;
+    }
+    .sidebar-logo img {
+      width: 214px;
+      height: 44px;
+    }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding-left: 24px;
+    }
+    .sidebar-item {
+      margin-bottom: 25px;
+    }
+    .sidebar-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 236px;
+      margin-bottom: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-toggle.open {
+      opacity: 1;
+    }
+    .sidebar-dropdown-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-dropdown-title img {
+      width: 20px;
+      height: 20px;
+    }
+    .sidebar-dropdown-title span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .sidebar-dropdown-toggle img.arrow {
+      width: 20px;
+      height: 20px;
+    }
+    .sidebar-dropdown-content {
+      display: none;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-content.open {
+      display: block;
+    }
+    .sidebar-dropdown-links {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      padding-left: 28px;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-link img {
+      width: 11px;
+      height: 11px;
+    }
+    .sidebar-mobile {
+      display: none;
+      background: #261148;
+      width: 315px;
+      height: 100vh;
+      padding-bottom: 80px;
+      transition: all 0.3s ease-in-out;
+      border-right: 4px solid rgba(20, 9, 38, 0.1);
+      flex-direction: column;
+      font-weight: 500;
+      font-size: 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 111;
+    }
+    .sidebar-mobile.show {
+      display: flex;
+    }
+    .sidebar-mobile-toggle {
+      display: none;
+      cursor: pointer;
+      width: 100vw;
+      height: 50px;
+      background: #261148;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      position: fixed;
+      bottom: 0;
+      z-index: 1111;
+      justify-content: center;
+      align-items: center;
+    }
+    .sidebar-mobile-toggle img {
+      width: 20px;
+      height: auto;
+      transition: transform 0.3s ease-in-out;
+    }
+    .sidebar-mobile-toggle img.rotate {
+      transform: rotate(180deg);
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Background images */
+    .bg-top {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 0;
+      width: 372px;
+      height: auto;
+    }
+    .bg-bottom {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 0;
+      width: 532px;
+      height: auto;
+    }
+
+    @media (max-width: 600px){
+      .bg-top, .bg-bottom{
+         display: none;
+      }
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      height: 78px;
+      display: flex;
+      gap: 22px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      background: #31164D;
+      z-index: 50;
+    }
+    .navbar a, .navbar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 19.2px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .navbar a:hover, .navbar-item:hover {
+      opacity: 75%;
+    }
+    .navbar img {
+      height: auto;
+    }
+    .navbar-upload {
+      width: 92px;
+      height: 24px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 1px solid #CF36E9;
+      border-radius: 18px;
+      cursor: pointer;
+    }
+    .navbar-upload img {
+      width: 12px;
+      height: 6px;
+    }
+    .navbar-bell img {
+      width: 20px;
+      height: auto;
+      cursor: pointer;
+    }
+    .navbar-bell:hover {
+      opacity: 75%;
+    }
+    .navbar-user {
+      width: 174px;
+      height: 37px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+    }
+    .navbar-user-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .navbar-user img {
+      width: 37px;
+      height: 37px;
+    }
+    .navbar-user-chevron img {
+      width: 12px;
+      height: 6px;
+    }
+    .navbar-dropdown, .navbar-user-dropdown, .navbar-upload-dropdown, .navbar-bell-dropdown {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      background: #31164D;
+      border-radius: 12px;
+      padding: 20px;
+      gap: 20px;
+      z-index: 60;
+      border: 1px solid #ce36e963;
+      font-size: 12px;
+    }
+    .navbar-dropdown.show, .navbar-user-dropdown.show, .navbar-upload-dropdown.show, .navbar-bell-dropdown.show {
+      display: flex;
+    }
+    .navbar-dropdown{
+      width: fit-content;
+      flex-direction: column;
+      top: 50px;
+      
+    }
+    .navbar-user-dropdown {
+      top: 78px;
+      right: 10px;
+      width: fit-content;
+    }
+    .navbar-upload-dropdown {
+      top: 78px;
+      right: 320px;
+      width: fit-content;
+    }
+    .navbar-bell-dropdown {
+      top: 78px;
+      right: 20px;
+      width: fit-content;
+      max-width: 400px;
+    }
+    .navbar-mobile-toggle {
+      display: none;
+    }
+    .navbar-mobile-toggle img {
+      width: 30px;
+      height: auto;
+      transition: transform 0.7s;
+    }
+    .navbar-mobile-toggle img.rotate {
+      transform: rotate(180deg);
+    }
+    .experiment, .analytics, .record-screen, .teams{
+      cursor: pointer;
+    }
+
+
+    /* Container */
+    .container {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      padding-bottom: 160px;
+      gap: 8px;
+    }
+
+    /* Header */
+    .container-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding-top: 40px;
+    }
+    .container-back {
+      position: absolute;
+      left: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #8C8C8C;
+      cursor: pointer;
+    }
+    .container-back:hover {
+      color: #ffffff;
+    }
+    @media (max-width: 640px) {
+      .container-back {
+        top: 20px;
+      }
+    }
+    .container-title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container-title h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .container-title p {
+      font-size: 12px;
+      font-weight: 400;
+      color: #CF36E9;
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      gap: 8px;
+    }
+    .container-title button {
+      width: 74px;
+      height: 24px;
+      background: #CF36E9;
+      color: #ffffff;
+      border-radius: 4px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .container-skip {
+      position: absolute;
+      right: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #CF36E9;
+      cursor: pointer;
+    }
+    .container-skip:hover {
+      color: #ffffff;
+    }
+    @media (max-width: 640px) {
+      .container-skip {
+        top: 20px;
+      }
+    }
+
+    /* Content */
+    .container-content {
+      display: flex;
+      gap: 12px;
+      align-self: center;
+    }
+    @media (max-width: 640px) {
+      .container-content {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    .content-image {
+      width: 400px;
+      min-height: 354px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    @media (max-width: 640px) {
+      .content-image {
+        max-width: 400px;
+        width: 100%;
+      }
+    }
+    .content-widget {
+      width: 302px;
+      min-height: 355px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 8px;
+      padding: 20px;
+      background: #140926;
+      gap: 4px;
+    }
+    @media (max-width: 640px) {
+      .content-widget {
+        width: 100%;
+      }
+    }
+    .widget-toggle {
+      width: 188px;
+      height: 45px;
+      border-radius: 60px;
+      background: #261148;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .widget-toggle-option {
+      width: 90px;
+      height: 36px;
+      border-radius: 60px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+    }
+    .widget-toggle-option.active {
+      background: #140926;
+      opacity: 1;
+    }
+    .widget-toggle-option.inactive {
+      background: transparent;
+      opacity: 0.5;
+    }
+    .widget-toggle-option img {
+      width: 16px;
+      height: 16px;
+    }
+    .widget-toggle-option div {
+      font-size: 12.51px;
+    }
+
+    /* TextScriptFirst */
+    .text-script-first {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 6px;
+    }
+    .text-script-first-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .text-script-first-label img {
+      width: 16px;
+      height: 16px;
+    }
+    .text-script-first-label div {
+      font-size: 12.51px;
+      font-weight: 700;
+    }
+    .text-script-first-textarea {
+      min-height: 95px;
+      width: 100%;
+      border-radius: 4px;
+      padding: 5px;
+      background: #261148;
+      font-size: 12px;
+      font-weight: 400;
+      resize: none;
+      color: #dbdbdb;
+      border: none;
+      outline: none;
+    }
+    .text-script-first-textarea::placeholder {
+      color: #dbdbdb;
+      font-weight: 400;
+    }
+    .text-script-first-split {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .text-script-first-split img {
+      width: 24px;
+      height: 24px;
+    }
+    .text-script-first-split div {
+      font-size: 12.51px;
+      font-weight: 700;
+    }
+    .text-script-first-description {
+      font-size: 12px;
+      font-weight: 300;
+      color: #8C8C8C;
+    }
+    .text-script-first-toggle {
+      width: 190px;
+      height: 45px;
+      border-radius: 12px;
+      background: #9413E6;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .text-script-first-toggle-option {
+      width: 90px;
+      height: 36px;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 12.51px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+    }
+    .text-script-first-toggle-option.active {
+      background: #140926;
+    }
+    .text-script-first-toggle-option.inactive {
+      background: transparent;
+    }
+
+    /* TextScriptSecond */
+    .text-script-second {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 6px;
+    }
+    .text-script-second-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .text-script-second-label img {
+      width: 24px;
+      height: 24px;
+    }
+    .text-script-second-label div {
+      font-size: 12.51px;
+      font-weight: 700;
+    }
+    .text-script-second-textarea {
+      min-height: 196px;
+      width: 100%;
+      border-radius: 4px;
+      padding: 5px;
+      background: #261148;
+      resize: none;
+      color: #dbdbdb;
+      border: none;
+      outline: none;
+    }
+    .text-script-second-voice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .text-script-second-voice-label {
+      display: flex;
+      flex-direction: column;
+    }
+    .text-script-second-voice-label div:first-child {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .text-script-second-voice-label div:first-child img {
+      width: 20px;
+      height: 20px;
+    }
+    .text-script-second-voice-label div:first-child div {
+      font-size: 12.51px;
+      font-weight: 700;
+    }
+    .text-script-second-voice-label div:last-child {
+      font-size: 10px;
+      color: #8C8C8C;
+    }
+    .text-script-second-toggle {
+      position: relative;
+      display: inline-flex;
+      width: 41px;
+      height: 20px;
+      align-items: center;
+      border-radius: 9999px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .text-script-second-toggle.on {
+      background: #9413E6;
+    }
+    .text-script-second-toggle.off {
+      background: gray;
+    }
+    .text-script-second-toggle-circle {
+      display: inline-block;
+      width: 16.57px;
+      height: 16.57px;
+      background: white;
+      border-radius: 9999px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+    }
+    .text-script-second-toggle-circle.on {
+      transform: translateX(24px);
+    }
+    .text-script-second-toggle-circle.off {
+      transform: translateX(0);
+    }
+
+    /* AudioScriptFirst */
+    .audio-script-first {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 12px;
+    }
+    .audio-script-first-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .audio-script-first-label img {
+      width: 24px;
+      height: 24px;
+    }
+    .audio-script-first-label div {
+      font-size: 12.51px;
+      font-weight: 700;
+    }
+    .audio-script-first-description {
+      font-size: 10px;
+      font-weight: 300;
+      color: #8C8C8C;
+    }
+    .audio-script-first-record, .audio-script-first-upload {
+      background: #261148;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 5px;
+      border-radius: 8px;
+      width: 100%;
+      height: 87px;
+      cursor: pointer;
+    }
+    .audio-script-first-record:hover, .audio-script-first-upload:hover {
+      animation: pulse 1s infinite;
+    }
+    .audio-script-first-record img, .audio-script-first-upload img {
+      width: 24px;
+      height: 24px;
+    }
+    .audio-script-first-record div, .audio-script-first-upload div {
+      font-weight: 600;
+    }
+    .audio-script-first-upload input {
+      display: none;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      width: 100%;
+      max-width: 686px;
+      height: 7px;
+      border-radius: 8px;
+      background: #140926;
+      position: relative;
+      align-self: center;
+      margin-top: 20px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      background: #CF36E9;
+    }
+    .progress-bar-dot {
+      position: absolute;
+      top: -2.5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      background: #CF36E9;
+    }
+
+    /* Continue Button */
+    .continue-button {
+      background: #9413E6;
+      border-radius: 3.13px;
+      width: 199.43px;
+      height: 31px;
+      margin-top: 20px;
+      display: flex;
+      align-self: center;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .progress-message {
+      font-size: 12px;
+      font-weight: 300;
+      color: #8C8C8C;
+      align-self: center;
+      margin-top: 20px;
+    }
+
+    /* Recording Modals */
+    .recording-modal {
+      display: none;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease-in-out;
+      position: fixed;
+      top: 0;
+      left: 10%;
+      z-index: 20;
+      width: 100vw;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    @media (max-width: 1280px) {
+      .recording-modal {
+        left: 0;
+      }
+    }
+    .recording-modal.show {
+      display: flex;
+    }
+    .recording-modal-card {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      padding: 20px;
+      gap: 12px;
+      background: #140926;
+    }
+    @media (max-width: 640px) {
+      .recording-modal-card {
+        width: 100%;
+      }
+    }
+    .recording-modal-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .recording-modal-header div:first-child {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 600;
+    }
+    .recording-modal-header div:first-child img {
+      width: 20px;
+      height: auto;
+    }
+    .recording-modal-header div:last-child {
+      font-size: 12px;
+      font-weight: 100;
+      text-align: center;
+    }
+    .recording-modal-action {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #261148;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      cursor: pointer;
+    }
+    .recording-modal-action:hover {
+      background: #31164D;
+    }
+    .recording-modal-action div {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #261148;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .recording-modal-action div.pulse-fast {
+      animation: pulse-fast 0.5s infinite;
+    }
+    .recording-modal-action div div {
+      width: 46.67px;
+      height: 46.67px;
+      background: white;
+      border-radius: 12px;
+    }
+    .recording-modal-action span {
+      font-size: 22.54px;
+      font-weight: 600;
+    }
+    .recording-modal-amplitude {
+      width: 270px;
+      height: 57px;
+      border-radius: 32px;
+      background: #261148;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .recording-modal-amplitude img {
+      width: 245px;
+      height: 37px;
+    }
+    .recording-modal-amplitude.animate-pulse {
+      animation: pulse 1s infinite;
+    }
+    .recording-modal-timer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .recording-modal-timer img {
+      width: 15px;
+      height: auto;
+    }
+    .recording-modal-footer {
+      font-size: 12px;
+      font-weight: 100;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .recording-modal-paused {
+      width: 319px;
+      height: 59.422px;
+      border-radius: 32px;
+      background: #261148;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 80px;
+    }
+    .recording-modal-paused img:first-child {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(0, 0, 0, 0.19);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .recording-modal-paused img:last-child {
+      width: 255.41px;
+      height: 38.572px;
+    }
+    .recording-modal-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      align-self: center;
+      margin-top: 20px;
+    }
+    .recording-modal-buttons button:first-child {
+      border-radius: 3.13px;
+      border: 1px solid #9413E6;
+      color: #9413E6;
+      font-size: 9.39px;
+      font-weight: 700;
+      width: 122px;
+      height: 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .recording-modal-buttons button:last-child {
+      border-radius: 3.13px;
+      font-size: 9.39px;
+      font-weight: 700;
+      width: 122px;
+      height: 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .recording-modal-buttons button:last-child.enabled {
+      background: #9413E6;
+    }
+    .recording-modal-buttons button:last-child.enabled:hover {
+      background: #7A10C7;
+    }
+    .recording-modal-buttons button:last-child.disabled {
+      background: rgba(148, 19, 230, 0.4);
+      cursor: not-allowed;
+    }
+
+    /* Generating Overlay */
+    .generating-overlay {
+      display: none;
+      background: #261148;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1111;
+    }
+    @media (min-width: 1024px) {
+      .generating-overlay {
+        left: 10%;
+      }
+    }
+    .generating-overlay.show {
+      display: block;
+    }
+    .generating-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      gap: 20px;
+      padding: 20px;
+    }
+    .generating-loader {
+      width: 175.3px;
+      height: 140px;
+      margin-top: 199px;
+      animation: pulse 1s infinite;
+    }
+    @media (max-width: 640px) {
+      .generating-loader {
+        margin-top: 160px;
+      }
+    }
+    .generating-title {
+      font-size: 32px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .generating-progress {
+      max-width: 715px;
+      width: 100%;
+      height: 5px;
+      background: #D9D9D9;
+      border-radius: 193px;
+      overflow: hidden;
+    }
+    .generating-progress-bar {
+      height: 100%;
+      background: #9413E6;
+      transition: width 0.1s;
+    }
+    .generating-message {
+      font-size: 14px;
+      color: rgba(140, 140, 140, 0.5);
+      text-align: center;
+    }
+
+    /* Trouble Overlay */
+    .trouble-overlay {
+      display:none;
+      background: #261148;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1111;
+    }
+    @media (min-width: 1024px) {
+      .trouble-overlay {
+        left: 10%;
+      }
+    }
+    .trouble-overlay.show {
+      display: block;
+    }
+    .trouble-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      gap: 20px;
+      padding: 20px;
+    }
+    .trouble-loader {
+      width: 175.3px;
+      height: 140px;
+      margin-top: 199px;
+      animation: pulse 1s infinite;
+    }
+    @media (max-width: 640px) {
+      .trouble-loader {
+        margin-top: 160px;
+      }
+    }
+    .trouble-heading {
+      font-size: 32px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .trouble-message {
+      font-size: 14px;
+      color: rgba(140, 140, 140, 0.5);
+      text-align: center;
+    }
+    .trouble-buttons {
+      width: 100%;
+      max-width: 516px;
+      height: 49px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .trouble-buttons .cancel {
+      background: #140926;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8C8C8C;
+      cursor: pointer;
+      z-index: 2;
+      align-items: center;
+    }
+    .trouble-buttons .retry {
+      background: #9413E6;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      align-items: center;
+    }
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+      .sidebar-mobile-toggle {
+        display: flex;
+      }
+    }
+    @media (max-width: 640px) {
+     
+      .navbar a, .navbar-item {
+        display: none;
+      }
+      .navbar-mobile-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 19.2px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .navbar-mobile-toggle:hover {
+        opacity: 75%;
+      }
+      .navbar-upload {
+        width: fit-content;
+        padding: 8px;
+        font-size: 10px;
+      }
+      .navbar-upload img {
+        width: 8px;
+      }
+      .navbar-user {
+        width: fit-content;
+      }
+      .navbar-user-text {
+        font-size: 8px;
+      }
+      .navbar-user img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    @media (max-width: 1280px) {
+      .navbar a div, .navbar-item div {
+        font-size: 12px;
+      }
+    }
+    @media (max-width: 768px) {
+      .navbar a div, .navbar-item div {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+     <!-- Sidebar -->
+     <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="logo">
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-item">
+          <div class="sidebar-dropdown-toggle" data-id="ai-video-creator">
+            <div class="sidebar-dropdown-title">
+              <img src="../assets/images/ai-magic.png" alt="Ai Video Creator">
+              <span>Ai Video Creator</span>
+            </div>
+            <img class="arrow" src="../assets/images/arrow-down.png" alt="toggle">
+          </div>
+          <div class="sidebar-dropdown-content" data-id="ai-video-creator">
+            <div class="sidebar-dropdown-links">
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="../assets/images/dot3.png" alt="active">
+                <a href="./avatar.html">Avatar</a>
+              </div>
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="../assets/images/dot3.png" alt="active" style="display: none;">
+                <a href="./voices.html">Voices</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Mobile Sidebar -->
+    <aside id="sidebar-mobile" class="sidebar-mobile">
+      <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="logo">
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-item">
+          <div class="sidebar-dropdown-toggle" data-id="ai-video-creator-mobile">
+            <div class="sidebar-dropdown-title">
+              <img src="../assets/images/ai-magic.png" alt="Ai Video Creator">
+              <span>Ai Video Creator</span>
+            </div>
+            <img class="arrow" src="../assets/images/arrow-down.png" alt="toggle">
+          </div>
+          <div class="sidebar-dropdown-content" data-id="ai-video-creator-mobile">
+            <div class="sidebar-dropdown-links">
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="../assets/images/dot3.png" alt="active">
+                <a href="./avatar.html">Avatar</a>
+              </div>
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="../assets/images/dot3.png" alt="active" style="display: none;">
+                <a href="./voices.html">Voices</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Mobile Sidebar Toggle -->
+    <nav id="sidebar-mobile-toggle" class="sidebar-mobile-toggle">
+      <img id="sidebar-toggle-icon" class="rotate" src="../assets/images/chevron-down.png" alt="chevron">
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <img class="bg-top" src="../assets/images/bgtop.png" alt="bg svg">
+      <img class="bg-bottom" src="../assets/images/bgbottom.png" alt="bg svg two">
+
+       <!-- Navbar -->
+       <div class="navbar">
+        <a href="#">
+          <img src="../assets/images/experiment.png" alt="icon" width="20">
+          <div>Experiments</div>
+        </a>
+        <a href="#">
+          <img src="../assets/images/analytics.png" alt="icon two" width="17">
+          <div>Analytics</div>
+        </a>
+        <a href="#">
+          <img src="../assets/images/teams.png" alt="icon three" width="17">
+          <div>Teams</div>
+        </a>
+        <a href="#" class="navbar-item">
+          <img src="../assets/images/screenrecord.png" alt="icon four" width="23">
+          <div>Record Screen</div>
+        </a>
+        <div class="navbar-mobile-toggle">
+          <img id="navbar-toggle" src="../assets/images/arrow-down.png" alt="dropdown" width="30">
+        </div>
+        <div class="navbar-upload" id="navbar-upload">
+          Upload
+          <img src="../assets/images/chevron-down.png" alt="drop down">
+        </div>
+        <div class="navbar-bell" id="navbar-bell">
+          <img src="../assets/images/bell.png" alt="bell" width="20">
+        </div>
+        <div class="navbar-user" id="navbar-user">
+          <div class="navbar-user-text">
+            <div>Welcome</div>
+            <div>Administrator hello</div>
+          </div>
+          <img src="../assets/images/user-avatar.png" alt="user profile">
+          <div class="navbar-user-chevron">
+            <img src="../assets/images/chevron-down.png" alt="chevron" style="width: 12px; height: auto;">
+          </div>
+        </div>
+        <div id="navbar-dropdown" class="navbar-dropdown">
+            <div class="experiment">Experiments</div>
+            <div class="analytics">Analytics</div>
+            <div class="teams">Teams</div>
+            <div class="record-screen">Record Screen</div>
+        </div>
+        <div id="navbar-user-dropdown" class="navbar-user-dropdown" aria-labelledby="triggerId">
+          <div class="dropdown-top pb-2" style="border-bottom: 5px solid #CF36E9;">
+              @Therockjohnson <br>
+              Dwaynejohnson@Gmail.Com
+          </div>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+              <i class="fa-regular fa-user"></i>
+              My Account
+          </a>
+
+
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-regular fa-file-lines"></i>
+              Billing
+          </a>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-solid fa-up-right-from-square"></i>
+              Upgrade
+          </a>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
+          </a>
+
+      </div>
+        <div id="navbar-upload-dropdown" style="font-size: 12px; cursor: pointer;" class="navbar-upload-dropdown">
+         upload video
+        </div>
+        <div id="navbar-bell-dropdown" class="navbar-bell-dropdown" aria-labelledby="triggerId">
+          <div class="notification-inner d-flex flex-column gap-2">
+              <div class="notification-head d-flex align-items-center justify-content-center gap-2">
+                <i class="fa-solid fa-bell" style="color: #CF36E9"></i>
+                  <h2 class="title">
+                      Latest Changes
+                  </h2>
+              </div>
+              <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+                  <div class="top d-flex items-center gap-2">
+                      <span class="tag px-2" style="background: #CF36E9;">
+                          New
+                      </span>
+                      <span class="title" style="font-weight: 600;">
+                          New Improvement And Updates
+                      </span>
+                  </div>
+                  <div class="notification-body">
+                      Good news! New upgrades & improvement are LIVE!
+                      TEXT to speech, we have more..
+                  </div>
+              </div>
+              <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+                <div class="top d-flex items-center gap-2">
+                    <span class="tag px-2" style="background: #CF36E9;">
+                        New
+                    </span>
+                    <span class="title" style="font-weight: 600;">
+                        New Improvement And Updates
+                    </span>
+                </div>
+                <div class="notification-body">
+                    Good news! New upgrades & improvement are LIVE!
+                    TEXT to speech, we have more..
+                </div>
+            </div>
+            <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+              <div class="top d-flex items-center gap-2">
+                  <span class="tag px-2" style="background: #CF36E9;">
+                      New
+                  </span>
+                  <span class="title" style="font-weight: 600;">
+                      New Improvement And Updates
+                  </span>
+              </div>
+              <div class="notification-body">
+                  Good news! New upgrades & improvement are LIVE!
+                  TEXT to speech, we have more..
+              </div>
+          </div>
+
+           
+          </div>
+      </div>
+      </div>
+      <!-- Container -->
+      <div class="container">
+        <div class="container-header">
+          <span class="container-back" onclick="history.back()">Back</span>
+          <div id="container-title" class="container-title">
+            <h1>Write your script</h1>
+            <p>
+              Don’t Know what to write?
+              <button>Generate</button>
+            </p>
+            <span class="container-skip" onclick="handleSkip()">Skip to editor</span>
+          </div>
+          <span id="container-skip-second" class="container-skip" onclick="handleSkip()" style="display: none;">Skip to editor</span>
+        </div>
+
+        <div id="container-content" class="container-content">
+          <img class="content-image" src="../assets/images/person-12.png" alt="picture of a person">
+          <div class="content-widget">
+            <div class="widget-toggle">
+              <div id="toggle-text" class="widget-toggle-option active">
+                <img src="../assets/images/text-circle.png" alt="text icon">
+                <div>Text</div>
+              </div>
+              <div id="toggle-audio" class="widget-toggle-option inactive">
+                <img src="../assets/images/mic.png" alt="audio icon">
+                <div>Audio</div>
+              </div>
+            </div>
+            <div id="widget-content"></div>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div id="progress-bar-fill" class="progress-bar-fill" style="width: 40%;">
+            <div class="progress-bar-dot"></div>
+          </div>
+        </div>
+        <div class="progress-message">Complete the step by</div>
+        <button class="continue-button" onclick="handleContinueClick()">Continue</button>
+      </div>
+
+      <!-- Recording Modals -->
+      <div id="initial-record-modal" class="recording-modal">
+        <div class="recording-modal-card" onclick="event.stopPropagation()">
+          <div class="recording-modal-header">
+            <div>
+              <img src="../assets/images/mic.png" alt="record icon">
+              Record Audio
+            </div>
+            <div>Make sure you're in a quiet environment.</div>
+          </div>
+          <div class="recording-modal-action" onclick="handleRecording()">
+            <span>START</span>
+          </div>
+          <div class="recording-modal-amplitude">
+            <img src="../assets/images/amp.png" alt="amplitude">
+          </div>
+          <div class="recording-modal-timer">
+            <img src="../assets/images/reddot.png" alt="dot">
+            <div id="initial-timer">00:00</div>
+          </div>
+          <div class="recording-modal-footer">Make sure you're in a quiet environment.</div>
+        </div>
+      </div>
+
+      <div id="recording-modal" class="recording-modal">
+        <div class="recording-modal-card" onclick="event.stopPropagation()">
+          <div class="recording-modal-header">
+            <div>
+              <img src="../assets/images/mic.png" alt="record icon">
+              Record Audio
+            </div>
+            <div>Record your script (max 20 minutes)</div>
+          </div>
+          <div class="recording-modal-action" onclick="handlePause()">
+            <div class="pulse-fast">
+              <div></div>
+            </div>
+          </div>
+          <div class="recording-modal-amplitude animate-pulse">
+            <img src="../assets/images/amp.png" alt="amplitude">
+          </div>
+          <div class="recording-modal-timer">
+            <img src="../assets/images/reddot.png" alt="dot">
+            <div id="recording-timer">00:00</div>
+          </div>
+          <div class="recording-modal-footer">Make sure you're in a quiet environment.</div>
+        </div>
+      </div>
+
+      <div id="paused-modal" class="recording-modal">
+        <div class="recording-modal-card" onclick="event.stopPropagation()">
+          <div class="recording-modal-header">
+            <div>
+              <img src="../assets/images/mic.png" alt="record icon">
+              Record Audio
+            </div>
+            <div>Record your script (max 20 minutes)</div>
+          </div>
+          <div class="recording-modal-paused">
+            <audio id="paused-audio" style="display: none;"></audio>
+            <img id="play-pause-btn" src="../assets/images/playrecord.png" alt="control audio">
+            <img src="../assets/images/amp.png" alt="amplitude">
+          </div>
+          <div class="recording-modal-timer">
+            <img src="../assets/images/reddot.png" alt="dot">
+            <div id="paused-timer">00:00</div>
+          </div>
+          <div class="recording-modal-buttons">
+            <button onclick="handleRerecord()">Rerecord</button>
+            <button id="paused-continue" class="disabled">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generating Overlay -->
+      <div id="generating-overlay" class="generating-overlay">
+        <div class="generating-content">
+          <img class="bg-top" src="../assets/images/bgtop.png" alt="bg svg">
+          <img class="bg-bottom" src="../assets/images/bgbottom.png" alt="bg svg two">
+          <img class="generating-loader" src="../assets/images/loader.png" alt="loader">
+          <div class="generating-title">Performing Video Dual Magic</div>
+          <div class="generating-progress">
+            <div id="progress-bar" class="generating-progress-bar" style="width: 0%;"></div>
+          </div>
+          <div class="generating-message">This May take few minutes</div>
+        </div>
+      </div>
+
+      <!-- Trouble Overlay -->
+      <div id="trouble-overlay" class="trouble-overlay">
+        <div class="trouble-content">
+          <img class="bg-top" src="../assets/images/bgtop.png" alt="bg svg">
+          <img class="bg-bottom" src="../assets/images/bgbottom.png" alt="bg svg two">
+          <img class="trouble-loader" src="../assets/images/loader.png" alt="loader">
+          <div class="trouble-heading">We’re having trouble generating your video</div>
+          <div id="trouble-message" class="trouble-message"></div>
+          <div class="trouble-buttons">
+            <button onclick="handleCancel()" class="cancel">Cancel</button>
+            <button onclick="handleRetry()" class="retry">Retry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // State
+    let isDrop = false;
+    let isAudio = false;
+    let isLong = false;
+    let barWidth = 40;
+    let isInitialRecordState = false;
+    let isRecordingState = false;
+    let isPausedState = false;
+    let isSecondTextWidget = false;
+    let isFirstTextWidget = true;
+    let time = 0;
+    let audioFromRecord = null;
+    let mediaRecorder = null;
+    let mediaStream = null;
+    let scriptText = '';
+    let generating = false;
+    let error = null;
+    let isPlaying = false;
+    let allowVoiceTransform = false;
+    let uploadedFile = null;
+    let isOpen = {};
+    let activeLink = null;
+    let showBar = false;
+    let activeDropdown = null;
+    let timerInterval = null;
+
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeSidebar();
+      initializeWidget();
+      initializeRecording();
+      initializeProgressBar();
+    });
+
+     // Navbar dropdown toggle
+     const navbarToggle = document.getElementById('navbar-toggle');
+      const navbarDropdown = document.getElementById('navbar-dropdown');
+      navbarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isDrop = !isDrop;
+        closeOtherDropdowns('navbar-dropdown');
+        navbarDropdown.classList.toggle('show', isDrop);
+        navbarToggle.classList.toggle('rotate', isDrop);
+        activeDropdown = isDrop ? navbarDropdown : null;
+      });
+
+      // Navbar user dropdown
+      const navbarUser = document.getElementById('navbar-user');
+      const navbarUserDropdown = document.getElementById('navbar-user-dropdown');
+      navbarUser.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarUserDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-user-dropdown');
+        navbarUserDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarUserDropdown;
+      });
+
+      // Navbar upload dropdown
+      const navbarUpload = document.getElementById('navbar-upload');
+      const navbarUploadDropdown = document.getElementById('navbar-upload-dropdown');
+      navbarUpload.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarUploadDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-upload-dropdown');
+        navbarUploadDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarUploadDropdown;
+      });
+
+      // Navbar bell dropdown
+      const navbarBell = document.getElementById('navbar-bell');
+      const navbarBellDropdown = document.getElementById('navbar-bell-dropdown');
+      navbarBell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarBellDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-bell-dropdown');
+        navbarBellDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarBellDropdown;
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener('click', (e) => {
+        if (activeDropdown && !activeDropdown.contains(e.target)) {
+          activeDropdown.classList.remove('show');
+          if (activeDropdown === navbarDropdown) {
+            isDrop = false;
+            navbarToggle.classList.remove('rotate');
+          }
+          activeDropdown = null;
+        }
+      });
+
+      // Mobile navbar links
+      document.querySelectorAll('.experiment, .analytics, .record-screen, .teams')
+      .forEach(navlink=> {
+        navlink.addEventListener('click', ()=> {
+          window.location.href='#';
+        })
+      })
+
+      // Close all other dropdowns except the one specified
+    function closeOtherDropdowns(exceptId) {
+      const dropdowns = [
+        'navbar-dropdown',
+        'navbar-user-dropdown',
+        'navbar-upload-dropdown',
+        'navbar-bell-dropdown'
+      ];
+      dropdowns.forEach(id => {
+        if (id !== exceptId) {
+          const dropdown = document.getElementById(id);
+          if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+            if (id === 'navbar-dropdown') {
+              isDrop = false;
+              document.getElementById('navbar-toggle').classList.remove('rotate');
+            }
+          }
+        }
+      });
+      activeDropdown = null;
+    }
+
+    // Sidebar initialization
+    function initializeSidebar() {
+      const menuItems = [
+        {
+          id: 'ai-video-creator',
+          links: [
+            { href: './avatar.html', label: 'Avatar' },
+            { href: './voices.html', label: 'Voices' },
+          ],
+        },
+      ];
+
+      // Set active link based on current URL
+      const path = window.location.pathname;
+      menuItems.forEach(item => {
+        const active = item.links.find(link => link.href === path);
+        if (active) {
+          activeLink = { parentId: item.id, link: active.href };
+          isOpen[item.id] = true;
+          updateSidebar();
+        }
+      });
+
+      // Dropdown toggles
+      document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          const id = toggle.dataset.id;
+          isOpen[id] = !isOpen[id];
+          updateSidebar();
+        });
+      });
+
+      // Link clicks
+      document.querySelectorAll('.sidebar-dropdown-link a').forEach(link => {
+        link.addEventListener('click', () => {
+          const parentId = link.closest('.sidebar-dropdown-content').dataset.id.replace('-mobile', '');
+          activeLink = { parentId, link: link.getAttribute('href') };
+          updateSidebar();
+        });
+      });
+
+      // Mobile sidebar toggle
+      const mobileToggle = document.getElementById('sidebar-mobile-toggle');
+      const mobileSidebar = document.getElementById('sidebar-mobile');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+      mobileToggle.addEventListener('click', () => {
+        showBar = !showBar;
+        mobileSidebar.classList.toggle('show', showBar);
+        toggleIcon.classList.toggle('rotate', !showBar);
+      });
+    }
+
+    // Update sidebar UI
+    function updateSidebar() {
+      document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
+        const id = toggle.dataset.id;
+        const content = document.querySelector(`.sidebar-dropdown-content[data-id="${id}"]`);
+        toggle.classList.toggle('open', isOpen[id]);
+        content.classList.toggle('open', isOpen[id]);
+     });
+    }
+
+
+    // Widget Helper Functions
+    function resetAudioState() {
+      barWidth = 40;
+      isFirstTextWidget = true;
+      isSecondTextWidget = false;
+      time = 0;
+      audioFromRecord = null;
+      uploadedFile = null;
+      isInitialRecordState = false;
+      isRecordingState = false;
+      isPausedState = false;
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+      }
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+      }
+      mediaRecorder = null;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      updateProgressBar();
+    }
+
+    function getTextScriptFirst() {
+      return `
+        <div class="text-script-first">
+          <div class="text-script-first-label">
+            <img src="../assets/images/pencil-edit.png" alt="text icon">
+            <div>Enter Text</div>
+          </div>
+          <textarea id="script-textarea" class="text-script-first-textarea" placeholder="Write a short to medium length sentence, Separated by lines breaks for new ideas  (They will become new Shots)">${scriptText}</textarea>
+          <div class="text-script-first-split">
+            <img src="../assets/images/scissors.png" alt="text icon">
+            <div>Script Splitting</div>
+          </div>
+          <p class="text-script-first-description">
+            If you pick "Short", we'll cut down your script for a dynamic editing (3-5 seconds cuts).<br>
+            If you pick "Long", we'll do 12-15 second segments with less cuts.
+          </p>
+          <div class="text-script-first-toggle">
+            <div id="toggle-short" class="text-script-first-toggle-option ${isLong ? 'inactive' : 'active'}">Short</div>
+            <div id="toggle-long" class="text-script-first-toggle-option ${isLong ? 'active' : 'inactive'}">Long</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function initializeTextScriptFirst() {
+      const textarea = document.getElementById('script-textarea');
+      const toggleShort = document.getElementById('toggle-short');
+      const toggleLong = document.getElementById('toggle-long');
+
+      textarea.addEventListener('input', () => {
+        scriptText = textarea.value;
+      });
+
+      toggleShort.addEventListener('click', () => {
+        if (isLong) {
+          isLong = false;
+          toggleShort.classList.remove('inactive');
+          toggleShort.classList.add('active');
+          toggleLong.classList.remove('active');
+          toggleLong.classList.add('inactive');
+        }
+      });
+
+      toggleLong.addEventListener('click', () => {
+        if (!isLong) {
+          isLong = true;
+          toggleLong.classList.remove('inactive');
+          toggleLong.classList.add('active');
+          toggleShort.classList.remove('active');
+          toggleShort.classList.add('inactive');
+        }
+      });
+    }
+
+    function getTextScriptSecond() {
+      return `
+        <div class="text-script-second">
+          <div class="text-script-second-label">
+            <img src="../assets/images/scissors.png" alt="text icon">
+            <div>Cut Your Script</div>
+          </div>
+          <textarea id="script-textarea-second" class="text-script-second-textarea">${scriptText}</textarea>
+          <div class="text-script-second-voice">
+            <div class="text-script-second-voice-label">
+              <div>
+                <img src="../assets/images/ai-mic.png" alt="text icon">
+                <div>Voice Transformation</div>
+              </div>
+              <div>Choose a voice to embody your speech</div>
+            </div>
+            <div id="voice-transform-toggle" class="text-script-second-toggle ${allowVoiceTransform ? 'on' : 'off'}">
+              <span class="text-script-second-toggle-circle ${allowVoiceTransform ? 'on' : 'off'}"></span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function initializeTextScriptSecond() {
+      const textarea = document.getElementById('script-textarea-second');
+      const toggle = document.getElementById('voice-transform-toggle');
+      if (textarea) {
+        textarea.addEventListener('input', () => {
+          scriptText = textarea.value;
+        });
+      }
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          allowVoiceTransform = !allowVoiceTransform;
+          toggle.classList.toggle('on', allowVoiceTransform);
+          toggle.classList.toggle('off', !allowVoiceTransform);
+          toggle.children[0].classList.toggle('on', allowVoiceTransform);
+          toggle.children[0].classList.toggle('off', !allowVoiceTransform);
+          localStorage.setItem('VOICE_TRANSFORM', JSON.stringify(allowVoiceTransform));
+        });
+      }
+    }
+
+    function getAudioScriptFirst() {
+      return `
+        <div class="audio-script-first">
+          <div class="audio-script-first-label">
+            <img src="../assets/images/ai-audio.png" alt="text icon">
+            <div>Audio Script</div>
+          </div>
+          <p class="audio-script-first-description">
+            "Use the power of your voice to authentically express yourself and share your unique story with the world."
+          </p>
+          <div id="record-audio" class="audio-script-first-record">
+            <img src="../assets/images/mic.png" alt="text icon">
+            <div>Record Audio</div>
+          </div>
+          <label id="upload-audio-label" class="audio-script-first-upload">
+            <img src="../assets/images/upload.png" alt="text icon">
+            <div id="upload-text">${uploadedFile ? uploadedFile.name : 'Upload File'}</div>
+            <input id="upload-audio" type="file" accept="audio/*">
+          </label>
+        </div>
+      `;
+    }
+
+    function initializeAudioScriptFirst() {
+      const recordBtn = document.getElementById('record-audio');
+      const uploadInput = document.getElementById('upload-audio');
+      const uploadLabel = document.getElementById('upload-audio-label');
+
+      recordBtn.addEventListener('click', () => {
+        isInitialRecordState = true;
+        document.getElementById('initial-record-modal').classList.add('show');
+      });
+
+      uploadInput.addEventListener('change', () => {
+        uploadedFile = uploadInput.files[0];
+        document.getElementById('upload-text').textContent = uploadedFile ? uploadedFile.name : 'Upload File';
+        if (uploadedFile) {
+          isPausedState = false;
+          isSecondTextWidget = true;
+          isFirstTextWidget = false;
+          barWidth = 75;
+          updateWidget();
+          updateProgressBar();
+        }
+      });
+    }
+
+    // Widget
+    function initializeWidget() {
+      const toggleText = document.getElementById('toggle-text');
+      const toggleAudio = document.getElementById('toggle-audio');
+
+      toggleText.addEventListener('click', () => {
+        if (isAudio) {
+          isAudio = false;
+          resetAudioState();
+          updateWidget();
+        }
+      });
+
+      toggleAudio.addEventListener('click', () => {
+        if (!isAudio) {
+          isAudio = true;
+          resetAudioState();
+          updateWidget();
+        }
+      });
+
+      updateWidget(); // Initial render
+    }
+
+    function updateWidget() {
+      const toggleText = document.getElementById('toggle-text');
+      const toggleAudio = document.getElementById('toggle-audio');
+      const widgetContent = document.getElementById('widget-content');
+
+      toggleText.classList.toggle('active', !isAudio);
+      toggleText.classList.toggle('inactive', isAudio);
+      toggleAudio.classList.toggle('active', isAudio);
+      toggleAudio.classList.toggle('inactive', !isAudio);
+
+      if (isAudio) {
+        if (isSecondTextWidget) {
+          widgetContent.innerHTML = getTextScriptSecond();
+          initializeTextScriptSecond();
+        } else {
+          widgetContent.innerHTML = getAudioScriptFirst();
+          initializeAudioScriptFirst();
+        }
+      } else {
+        if (isSecondTextWidget) {
+          widgetContent.innerHTML = getTextScriptSecond();
+          initializeTextScriptSecond();
+        } else {
+          widgetContent.innerHTML = getTextScriptFirst();
+          initializeTextScriptFirst();
+        }
+      }
+    }
+
+    // Recording
+    function initializeRecording() {
+      const initialModal = document.getElementById('initial-record-modal');
+      const recordingModal = document.getElementById('recording-modal');
+      const pausedModal = document.getElementById('paused-modal');
+      const playPauseBtn = document.getElementById('play-pause-btn');
+      const pausedContinue = document.getElementById('paused-continue');
+      const pausedAudio = document.getElementById('paused-audio');
+
+      initialModal.addEventListener('click', () => {
+        handleClose();
+      });
+
+      recordingModal.addEventListener('click', () => {
+        handlePause();
+        isRecordingState = false;
+        recordingModal.classList.remove('show');
+      });
+
+      pausedModal.addEventListener('click', () => {
+        handleClose();
+      });
+
+      function handleRecording() {
+        isRecordingState = true;
+        isPausedState = false;
+        isInitialRecordState = false;
+        time = 0;
+        audioFromRecord = null;
+        document.getElementById('recording-timer').textContent = '00:00';
+        initialModal.classList.remove('show');
+        recordingModal.classList.add('show');
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          mediaStream = stream;
+          mediaRecorder = new MediaRecorder(stream);
+          let chunks = [];
+
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              chunks.push(event.data);
+            }
+          };
+
+          mediaRecorder.onstop = () => {
+            if (chunks.length > 0) {
+              const blob = new Blob(chunks, { type: 'audio/webm' });
+              audioFromRecord = URL.createObjectURL(blob);
+              pausedAudio.src = audioFromRecord;
+              pausedContinue.classList.remove('disabled');
+              pausedContinue.classList.add('enabled');
+            }
+            chunks = [];
+          };
+
+          mediaRecorder.start();
+          startTimer();
+        }).catch(err => {
+          console.error('Microphone access denied or error starting recording:', err);
+          error = 'Failed to access microphone. Please allow microphone access and try again.';
+          isRecordingState = false;
+          recordingModal.classList.remove('show');
+          document.getElementById('trouble-overlay').classList.add('show');
+          document.getElementById('trouble-message').textContent = error;
+        });
+      }
+
+      function handlePause() {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+          mediaStream?.getTracks().forEach(track => track.stop());
+          mediaStream = null;
+          mediaRecorder = null;
+        }
+        isPausedState = true;
+        isRecordingState = false;
+        isInitialRecordState = false;
+        recordingModal.classList.remove('show');
+        pausedModal.classList.add('show');
+        document.getElementById('paused-timer').textContent = formatTime(time);
+        stopTimer();
+      }
+
+      function handleRerecord() {
+        isRecordingState = true;
+        isPausedState = false;
+        isInitialRecordState = false;
+        time = 0;
+        audioFromRecord = null;
+        isPlaying = false;
+        pausedAudio.pause();
+        playPauseBtn.src = '../assets/images/playrecord.png';
+        pausedContinue.classList.remove('enabled');
+        pausedContinue.classList.add('disabled');
+        pausedModal.classList.remove('show');
+        recordingModal.classList.add('show');
+        document.getElementById('recording-timer').textContent = '00:00';
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          mediaStream = stream;
+          mediaRecorder = new MediaRecorder(stream);
+          let chunks = [];
+
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              chunks.push(event.data);
+            }
+          };
+
+          mediaRecorder.onstop = () => {
+            if (chunks.length > 0) {
+              const blob = new Blob(chunks, { type: 'audio/webm' });
+              audioFromRecord = URL.createObjectURL(blob);
+              pausedAudio.src = audioFromRecord;
+              pausedContinue.classList.remove('disabled');
+              pausedContinue.classList.add('enabled');
+            }
+            chunks = [];
+          };
+
+          mediaRecorder.start();
+          startTimer();
+        }).catch(err => {
+          console.error('Microphone access denied or error starting recording:', err);
+          error = 'Failed to access microphone. Please allow microphone access and try again.';
+          isRecordingState = false;
+          recordingModal.classList.remove('show');
+          document.getElementById('trouble-overlay').classList.add('show');
+          document.getElementById('trouble-message').textContent = error;
+        });
+      }
+
+      function handleContinue() {
+        if (audioFromRecord) {
+          isPausedState = false;
+          isSecondTextWidget = true;
+          isFirstTextWidget = false;
+          barWidth = 75;
+          pausedModal.classList.remove('show');
+          updateWidget();
+          updateProgressBar();
+        }
+      }
+
+      function handlePlayPause() {
+        if (audioFromRecord) {
+          if (isPlaying) {
+            pausedAudio.pause();
+          } else {
+            pausedAudio.play().catch(err => console.error('Playback error:', err));
+          }
+          isPlaying = !isPlaying;
+          playPauseBtn.src = isPlaying ? '../assets/images/pause.png' : '../assets/images/playrecord.png';
+        }
+      }
+
+      function handleClose() {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(track => track.stop());
+          mediaStream = null;
+        }
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
+        if (audioFromRecord) {
+          URL.revokeObjectURL(audioFromRecord);
+          audioFromRecord = null;
+        }
+        if (isPlaying) {
+          pausedAudio.pause();
+          isPlaying = false;
+          playPauseBtn.src = '../assets/images/playrecord.png';
+        }
+        isInitialRecordState = false;
+        isRecordingState = false;
+        isPausedState = false;
+        time = 0;
+        initialModal.classList.remove('show');
+        recordingModal.classList.remove('show');
+        pausedModal.classList.remove('show');
+        stopTimer();
+      }
+
+      function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          time += 1;
+          document.getElementById('recording-timer').textContent = formatTime(time);
+        }, 1000);
+      }
+
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+
+      window.handleRecording = handleRecording;
+      window.handlePause = handlePause;
+      window.handleRerecord = handleRerecord;
+      window.handleContinue = handleContinue;
+      playPauseBtn.addEventListener('click', handlePlayPause);
+      pausedContinue.addEventListener('click', handleContinue);
+    }
+
+    // Progress Bar
+    function initializeProgressBar() {
+      updateProgressBar();
+    }
+
+    function updateProgressBar() {
+      const fill = document.getElementById('progress-bar-fill');
+      const dot = document.querySelector('.progress-bar-dot');
+      fill.style.width = `${barWidth}%`;
+      dot.style.left = `calc(${barWidth}% - 6px)`;
+    }
+
+    // Handlers
+    function handleSkip() {
+      generating = true;
+      document.getElementById('generating-overlay').classList.add('show');
+      startProgress();
+      setTimeout(() => {
+        window.location.href = './preview.html';
+      }, 3000);
+    }
+
+    function handleRetry() {
+      error = null;
+      generating = true;
+      document.getElementById('trouble-overlay').classList.remove('show');
+      document.getElementById('generating-overlay').classList.add('show');
+      startProgress();
+    }
+
+    function handleCancel() {
+      error = null;
+      generating = false;
+      document.getElementById('trouble-overlay').classList.remove('show');
+      document.getElementById('generating-overlay').classList.remove('show');
+      clearProgress();
+    }
+
+    function handleContinueClick() {
+      if (!isAudio) {
+        if (isFirstTextWidget) {
+          const textarea = document.getElementById('script-textarea');
+          if (textarea && textarea.value.trim() !== '') {
+            isFirstTextWidget = false;
+            isSecondTextWidget = true;
+            barWidth = 75;
+            document.getElementById('container-title').style.display = 'none';
+            document.getElementById('container-skip-second').style.display = 'block';
+            document.getElementById('container-content').style.marginTop = '40px';
+            updateWidget();
+            updateProgressBar();
+          }
+        } else if (isSecondTextWidget) {
+          barWidth = 100;
+          updateProgressBar();
+          setTimeout(() => {
+            window.location.href = './choose-options.html';
+          }, 500);
+        }
+      } else {
+        if (isSecondTextWidget) {
+          barWidth = 100;
+          updateProgressBar();
+          setTimeout(() => {
+            window.location.href = './choose-options.html';
+          }, 500);
+        }
+      }
+    }
+
+    function startProgress() {
+      const progressBar = document.getElementById('progress-bar');
+      let progress = 0;
+      const duration = 3000;
+      const interval = 50;
+      const steps = duration / interval;
+      let currentStep = 0;
+
+      const progressInterval = setInterval(() => {
+        currentStep += 1;
+        progress = Math.min((currentStep / steps) * 100, 100);
+        progressBar.style.width = `${progress}%`;
+        if (progress >= 100) {
+          clearInterval(progressInterval);
+        }
+      }, interval);
+    }
+
+    function clearProgress() {
+      const progressBar = document.getElementById('progress-bar');
+      progressBar.style.width = '0%';
+    }
+
+    window.handleSkip = handleSkip;
+    window.handleRetry = handleRetry;
+    window.handleCancel = handleCancel;
+    window.handleContinueClick = handleContinueClick;
+  </script>
+</body>
+</html>

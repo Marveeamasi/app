@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consent Video</title>
+  <meta name="description" content="Your Number 1 Video Dual App - Record Consent Video">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <style>
+    /* Reset default browser styles*/
+    button, a, h1, h2, h3, h4, h5, h6, input, ul, ol {
+      all: unset;
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button {
+      cursor: pointer;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: normal;
+      font-size: inherit;
+    }
+    input {
+      background: transparent;
+      color: inherit;
+    }
+
+    /* Main container */
+    .main-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: #261148;
+      width: 315px;
+      height: 100vh;
+      border-right: 4px solid rgba(20, 9, 38, 0.1);
+      position: sticky;
+      left: 0;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      font-weight: 500;
+      font-size: 16px;
+    }
+    @media (max-width: 1024px) {
+      .sidebar {
+        position: fixed;
+        border-right: none;
+        border-top: 4px solid rgba(20, 9, 38, 0.1);
+        justify-content: space-between;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        top: auto;
+        bottom: 0;
+        z-index: 50;
+        flex-direction: row;
+        width: 100vw;
+        height: 100px;
+        left: 0;
+      }
+    }
+    .sidebar-logo {
+      width: fit-content;
+      height: fit-content;
+      padding: 41px 24px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1024px) {
+      .sidebar-logo {
+        display: none;
+      }
+    }
+    .sidebar-logo img {
+      width: 214px;
+      height: 44px;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 0 40px;
+      cursor: pointer;
+    }
+    @media (max-width: 1024px) {
+      .sidebar-link {
+        flex-direction: row-reverse;
+      }
+    }
+    .sidebar-link img {
+      width: 34px;
+      height: auto;
+    }
+    .sidebar-link div {
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+    .sidebar-divider {
+      position: relative;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .sidebar-divider {
+        display: none;
+      }
+    }
+    .sidebar-divider img {
+      position: absolute;
+      left: 55px;
+      width: 4px;
+      height: auto;
+    }
+    .sidebar-link-group {
+      transition: opacity 0.3s;
+    }
+    .sidebar-link-group:hover {
+      opacity: 1;
+    }
+    @media (max-width: 1024px) {
+      .sidebar-link-group {
+        margin: auto 0;
+      }
+    }
+    .sidebar-link-group div {
+      transition: opacity 0.3s;
+    }
+    .sidebar-link-group:hover div {
+      opacity: 1;
+    }
+
+    .main-content {
+      flex: 1;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 160px;
+    }
+
+    /* Background images */
+    .bg-top {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 0;
+      width: 372px;
+      height: auto;
+    }
+    .bg-bottom {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 0;
+      width: 532px;
+      height: auto;
+    }
+
+    @media (max-width: 600px){
+      .bg-top, .bg-bottom{
+         display: none;
+      }
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      height: 78px;
+      display: flex;
+      gap: 22px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      background: #31164D;
+      z-index: 50;
+    }
+    .navbar a, .navbar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 19.2px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .navbar a:hover, .navbar-item:hover {
+      opacity: 75%;
+    }
+    .navbar img {
+      height: auto;
+    }
+    .navbar-upload {
+      width: 92px;
+      height: 24px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 1px solid #CF36E9;
+      border-radius: 18px;
+      cursor: pointer;
+    }
+    .navbar-upload img {
+      width: 12px;
+      height: 6px;
+    }
+    .navbar-bell img {
+      width: 20px;
+      height: auto;
+      cursor: pointer;
+    }
+    .navbar-bell:hover {
+      opacity: 75%;
+    }
+    .navbar-user {
+      width: 174px;
+      height: 37px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+    }
+    .navbar-user-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .navbar-user img {
+      width: 37px;
+      height: 37px;
+    }
+    .navbar-user-chevron img {
+      width: 12px;
+      height: 6px;
+    }
+    .navbar-dropdown, .navbar-user-dropdown, .navbar-upload-dropdown, .navbar-bell-dropdown {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      background: #31164D;
+      border-radius: 12px;
+      padding: 20px;
+      gap: 20px;
+      z-index: 60;
+      border: 1px solid #ce36e963;
+      font-size: 12px;
+    }
+    .navbar-dropdown.show, .navbar-user-dropdown.show, .navbar-upload-dropdown.show, .navbar-bell-dropdown.show {
+      display: flex;
+    }
+    .navbar-dropdown{
+      width: fit-content;
+      flex-direction: column;
+      top: 50px;
+      
+    }
+    .navbar-user-dropdown {
+      top: 78px;
+      right: 10px;
+      width: fit-content;
+    }
+    .navbar-upload-dropdown {
+      top: 78px;
+      right: 320px;
+      width: fit-content;
+    }
+    .navbar-bell-dropdown {
+      top: 78px;
+      right: 20px;
+      width: fit-content;
+      max-width: 400px;
+    }
+    .navbar-mobile-toggle {
+      display: none;
+    }
+    .navbar-mobile-toggle img {
+      width: 30px;
+      height: auto;
+      transition: transform 0.7s;
+    }
+    .navbar-mobile-toggle img.rotate {
+      transform: rotate(180deg);
+    }
+    .experiment, .analytics, .record-screen, .teams{
+      cursor: pointer;
+    }
+    /* Container */
+    .container {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      padding-bottom: 160px;
+    }
+    @media (max-width: 640px) {
+      .container {
+        padding: 20px;
+      }
+    }
+
+    /* Header */
+    .container-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding-top: 40px;
+      padding-bottom: 25px;
+    }
+    .container-back {
+      position: absolute;
+      left: 40px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #8C8C8C;
+      cursor: pointer;
+    }
+    .container-back:hover {
+      color: #ffffff;
+    }
+    @media (max-width: 640px) {
+      .container-back {
+        top: 20px;
+      }
+    }
+    .container-title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container-title h1 {
+      font-size: 32px;
+      font-weight: 600;
+    }
+    .container-title p {
+      font-size: 14px;
+      font-weight: 400;
+      color: #8C8C8C;
+    }
+
+    /* Consent Alert */
+    .container-alert {
+      display: flex;
+      justify-content: center;
+      padding-top: 25px;
+    }
+    .alert {
+      background: #140926;
+      width: 710px;
+      height: fit-content;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 11px;
+    }
+    @media (max-width: 640px) {
+      .alert {
+        width: 100%;
+        height: auto;
+      }
+    }
+    .alert-description {
+      font-weight: 300;
+      font-size: 14px;
+      color: #8C8C8C;
+      text-align: center;
+    }
+    .alert-divider {
+      width: 100%;
+      border: none;
+      border-top: 1px solid rgba(241, 241, 241, 0.1);
+    }
+    .alert-sentence {
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .alert-sentence input {
+      border-bottom: 2px solid #ffffff;
+      min-width: 50px;
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    /* Drag and Drop Area */
+    .drag-drop-area {
+      border-radius: 65.81px;
+      margin-top: 40px;
+      width: 485.419px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(20, 9, 38, 0.81);
+    }
+
+    @media (max-width: 640px) {
+      .drag-drop-area {
+        width: 100%;
+        height: fit-content;
+        padding: 20px;
+      }
+    }
+    .drag-drop-inner {
+      border-radius: 44.39px;
+      width: 432.77px;
+      height: 253.16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(88, 88, 88, 0.09);
+      border: 1px solid rgba(136, 136, 136, 0.09);
+      backdrop-filter: blur(20px);
+    }
+    @media (max-width: 640px) {
+      .drag-drop-inner {
+        width: 100%;
+        height: 260px;
+      }
+    }
+    .drag-drop-label {
+      width: 90.55px;
+      height: 36.537px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 62.75px;
+      cursor: pointer;
+    }
+    .drag-drop-label img {
+      width: 24px;
+      height: 24px;
+    }
+    .drag-drop-label div {
+      font-size: 10.46px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+    .drag-drop-input {
+      display: none;
+    }
+
+    /* Buttons */
+    .container-buttons {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 12px;
+      margin-top: 40px;
+      justify-content: center;
+    }
+    .button-back {
+      width: 129px;
+      height: 35px;
+      background: #1B0C34;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .button-continue {
+      width: 129px;
+      height: 35px;
+      background: #9413E6;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .button-continue.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+/* Responsive Styles */
+@media (max-width: 1024px) {
+      .avatar-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .sidebar {
+        display: none;
+      }
+      .sidebar-mobile-toggle {
+        display: flex;
+      }
+    }
+    @media (max-width: 640px) {
+      .navbar a, .navbar-item {
+        display: none;
+      }
+      .navbar-mobile-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 19.2px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .navbar-mobile-toggle:hover {
+        opacity: 75%;
+      }
+      .navbar-upload {
+        width: fit-content;
+        padding: 8px;
+        font-size: 10px;
+      }
+      .navbar-upload img {
+        width: 8px;
+      }
+      .navbar-user {
+        width: fit-content;
+      }
+      .navbar-user-text {
+        font-size: 8px;
+      }
+      .navbar-user img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    @media (max-width: 1280px) {
+      .navbar a div, .navbar-item div {
+        font-size: 12px;
+      }
+    }
+    @media (max-width: 768px) {
+      .navbar a div, .navbar-item div {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="../assets/images/logo.png" alt="logo">
+      </div>
+      <a href="./how-it-works.html" class="sidebar-link">
+        <img src="../assets/images/lightbulb.png" alt="lightbulb">
+        <div>How it Works</div>
+      </a>
+      <div class="sidebar-divider">
+        <img src="../assets/images/verticalline.png" alt="vertical">
+      </div>
+      <a href="./consent-video.html" class="sidebar-link" style="opacity: 1;">
+        <img src="../assets/images/verifyicon.png" alt="verify">
+        <div>Consent video</div>
+      </a>
+      <div class="sidebar-link-group" style="opacity: 0.4;">
+        <div class="sidebar-divider">
+          <img src="../assets/images/verticalline.png" alt="vertical">
+        </div>
+        <a href="./upload-footage.html" class="sidebar-link">
+          <img src="../assets/images/youtube.png" alt="youtube">
+          <div>Upload footage</div>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <img class="bg-top" src="../assets/images/bgtop.png" alt="bg svg">
+      <img class="bg-bottom" src="../assets/images/bgbottom.png" alt="bg svg two">
+
+       <!-- Navbar -->
+       <div class="navbar">
+        <a href="#">
+          <img src="../assets/images/experiment.png" alt="icon" width="20">
+          <div>Experiments</div>
+        </a>
+        <a href="#">
+          <img src="../assets/images/analytics.png" alt="icon two" width="17">
+          <div>Analytics</div>
+        </a>
+        <a href="#">
+          <img src="../assets/images/teams.png" alt="icon three" width="17">
+          <div>Teams</div>
+        </a>
+        <a href="#" class="navbar-item">
+          <img src="../assets/images/screenrecord.png" alt="icon four" width="23">
+          <div>Record Screen</div>
+        </a>
+        <div class="navbar-mobile-toggle">
+          <img id="navbar-toggle" src="../assets/images/arrow-down.png" alt="dropdown" width="30">
+        </div>
+        <div class="navbar-upload" id="navbar-upload">
+          Upload
+          <img src="../assets/images/chevron-down.png" alt="drop down">
+        </div>
+        <div class="navbar-bell" id="navbar-bell">
+          <img src="../assets/images/bell.png" alt="bell" width="20">
+        </div>
+        <div class="navbar-user" id="navbar-user">
+          <div class="navbar-user-text">
+            <div>Welcome</div>
+            <div>Administrator hello</div>
+          </div>
+          <img src="../assets/images/user-avatar.png" alt="user profile">
+          <div class="navbar-user-chevron">
+            <img src="../assets/images/chevron-down.png" alt="chevron" style="width: 12px; height: auto;">
+          </div>
+        </div>
+        <div id="navbar-dropdown" class="navbar-dropdown">
+            <div class="experiment">Experiments</div>
+            <div class="analytics">Analytics</div>
+            <div class="teams">Teams</div>
+            <div class="record-screen">Record Screen</div>
+        </div>
+        <div id="navbar-user-dropdown" class="navbar-user-dropdown" aria-labelledby="triggerId">
+          <div class="dropdown-top pb-2" style="border-bottom: 5px solid #CF36E9;">
+              @Therockjohnson <br>
+              Dwaynejohnson@Gmail.Com
+          </div>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+              <i class="fa-regular fa-user"></i>
+              My Account
+          </a>
+
+
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-regular fa-file-lines"></i>
+              Billing
+          </a>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-solid fa-up-right-from-square"></i>
+              Upgrade
+          </a>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
+          </a>
+
+      </div>
+        <div id="navbar-upload-dropdown" style="font-size: 12px; cursor: pointer;" class="navbar-upload-dropdown">
+         upload video
+        </div>
+        <div id="navbar-bell-dropdown" class="navbar-bell-dropdown" aria-labelledby="triggerId">
+          <div class="notification-inner d-flex flex-column gap-2">
+              <div class="notification-head d-flex align-items-center justify-content-center gap-2">
+                <i class="fa-solid fa-bell" style="color: #CF36E9"></i>
+                  <h2 class="title">
+                      Latest Changes
+                  </h2>
+              </div>
+              <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+                  <div class="top d-flex items-center gap-2">
+                      <span class="tag px-2" style="background: #CF36E9;">
+                          New
+                      </span>
+                      <span class="title" style="font-weight: 600;">
+                          New Improvement And Updates
+                      </span>
+                  </div>
+                  <div class="notification-body">
+                      Good news! New upgrades & improvement are LIVE!
+                      TEXT to speech, we have more..
+                  </div>
+              </div>
+              <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+                <div class="top d-flex items-center gap-2">
+                    <span class="tag px-2" style="background: #CF36E9;">
+                        New
+                    </span>
+                    <span class="title" style="font-weight: 600;">
+                        New Improvement And Updates
+                    </span>
+                </div>
+                <div class="notification-body">
+                    Good news! New upgrades & improvement are LIVE!
+                    TEXT to speech, we have more..
+                </div>
+            </div>
+            <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+              <div class="top d-flex items-center gap-2">
+                  <span class="tag px-2" style="background: #CF36E9;">
+                      New
+                  </span>
+                  <span class="title" style="font-weight: 600;">
+                      New Improvement And Updates
+                  </span>
+              </div>
+              <div class="notification-body">
+                  Good news! New upgrades & improvement are LIVE!
+                  TEXT to speech, we have more..
+              </div>
+          </div>
+
+           
+          </div>
+      </div>
+      </div>
+
+
+      <!-- Container -->
+      <div class="container">
+        <div class="container-header">
+          <span class="container-back" onclick="history.back()">Back</span>
+          <div class="container-title">
+            <h1>Record consent video</h1>
+            <p>Your clone needs to be you</p>
+          </div>
+        </div>
+
+        <div class="container-alert">
+          <div class="alert">
+            <div class="alert-description">
+              To complete the training, we need to make sure that you're the person in the video. Upload a 30 secs video of you saying the following sentence:
+            </div>
+            <hr class="alert-divider">
+            <div class="alert-sentence">
+              <span>I,</span>
+              <input type="text" id="full-name" placeholder="Full Name" size="4">
+              <span>, authorize Argil to use the footage of me to build my avatar.</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="w-100 d-flex justify-content-center align-items-center">
+        <div id="drag-and-drop-area" class="drag-drop-area">
+          <div class="drag-drop-inner">
+            <label for="consent-video" class="drag-drop-label">
+              <img src="../assets/images/cloud-upload.png" alt="a play icon">
+              <div id="upload-text">Upload</div>
+              <input type="file" id="consent-video" class="drag-drop-input" accept="video/*">
+            </label>
+          </div>
+        </div>
+      </div>
+
+        <div class="container-buttons">
+          <button class="button-back" onclick="history.back()">Back</button>
+          <button id="continue-btn" class="button-continue disabled" disabled>Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // State
+    let isDrop = false;
+    let selectedVideo = null;
+    let showBar = false;
+    let activeDropdown = null;
+
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeVideoUpload();
+      initializeNameInput();
+    });
+
+   // Navbar dropdown toggle
+   const navbarToggle = document.getElementById('navbar-toggle');
+      const navbarDropdown = document.getElementById('navbar-dropdown');
+      navbarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isDrop = !isDrop;
+        closeOtherDropdowns('navbar-dropdown');
+        navbarDropdown.classList.toggle('show', isDrop);
+        navbarToggle.classList.toggle('rotate', isDrop);
+        activeDropdown = isDrop ? navbarDropdown : null;
+      });
+
+      // Navbar user dropdown
+      const navbarUser = document.getElementById('navbar-user');
+      const navbarUserDropdown = document.getElementById('navbar-user-dropdown');
+      navbarUser.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarUserDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-user-dropdown');
+        navbarUserDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarUserDropdown;
+      });
+
+      // Navbar upload dropdown
+      const navbarUpload = document.getElementById('navbar-upload');
+      const navbarUploadDropdown = document.getElementById('navbar-upload-dropdown');
+      navbarUpload.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarUploadDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-upload-dropdown');
+        navbarUploadDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarUploadDropdown;
+      });
+
+      // Navbar bell dropdown
+      const navbarBell = document.getElementById('navbar-bell');
+      const navbarBellDropdown = document.getElementById('navbar-bell-dropdown');
+      navbarBell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarBellDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-bell-dropdown');
+        navbarBellDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarBellDropdown;
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener('click', (e) => {
+        if (activeDropdown && !activeDropdown.contains(e.target)) {
+          activeDropdown.classList.remove('show');
+          if (activeDropdown === navbarDropdown) {
+            isDrop = false;
+            navbarToggle.classList.remove('rotate');
+          }
+          activeDropdown = null;
+        }
+      });
+
+      // Mobile navbar links
+      document.querySelectorAll('.experiment, .analytics, .record-screen, .teams')
+      .forEach(navlink=> {
+        navlink.addEventListener('click', ()=> {
+          window.location.href='#';
+        })
+      })
+
+        // Close all other dropdowns except the one specified
+    function closeOtherDropdowns(exceptId) {
+      const dropdowns = [
+        'navbar-dropdown',
+        'navbar-user-dropdown',
+        'navbar-upload-dropdown',
+        'navbar-bell-dropdown'
+      ];
+      dropdowns.forEach(id => {
+        if (id !== exceptId) {
+          const dropdown = document.getElementById(id);
+          if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+            if (id === 'navbar-dropdown') {
+              isDrop = false;
+              document.getElementById('navbar-toggle').classList.remove('rotate');
+            }
+          }
+        }
+      });
+      activeDropdown = null;
+    }
+
+
+    // Video Upload
+    function initializeVideoUpload() {
+      const dragDropArea = document.getElementById('drag-and-drop-area');
+      const fileInput = document.getElementById('consent-video');
+      const uploadText = document.getElementById('upload-text');
+      const continueBtn = document.getElementById('continue-btn');
+
+      dragDropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      dragDropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('video/')) {
+          validateVideo(file);
+        }
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('video/')) {
+          validateVideo(file);
+        }
+      });
+
+      continueBtn.addEventListener('click', () => {
+        if (selectedVideo) {
+          localStorage.setItem('CONSENT_VIDEO_FROM_VD', selectedVideo.name);
+          window.location.href = './upload-footage.html';
+        }
+      });
+
+      function validateVideo(file) {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.src = URL.createObjectURL(file);
+
+        video.onloadedmetadata = () => {
+          if (video.duration > 30) {
+            alert('Video duration should not exceed 30 seconds.');
+            selectedVideo = null;
+            uploadText.textContent = 'Upload';
+            continueBtn.classList.add('disabled');
+            continueBtn.disabled = true;
+            fileInput.value = '';
+          } else {
+            selectedVideo = file;
+            uploadText.textContent = file.name;
+            continueBtn.classList.remove('disabled');
+            continueBtn.disabled = false;
+          }
+          URL.revokeObjectURL(video.src);
+        };
+      }
+    }
+
+    // Name Input
+    function initializeNameInput() {
+      const nameInput = document.getElementById('full-name');
+      nameInput.addEventListener('input', () => {
+        nameInput.size = Math.max(nameInput.value.length, 4);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai Video Creator</title>
+  <meta name="description" content="Your Number 1 Video Dual App">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/global.css">
+  <style>
+    /* Reset default browser styles */
+    button, a, h1, h2, h3, h4, h5, h6, input, ul, ol {
+      all: unset;
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button {
+      cursor: pointer;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: normal;
+      font-size: inherit;
+    }
+
+    /* Main container */
+    .main-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: #261148;
+      width: 315px;
+      height: 100vh;
+      transition: all 0.3s ease-in-out;
+      border-right: 4px solid rgba(20, 9, 38, 0.1);
+      display: flex;
+      flex-direction: column;
+      font-weight: 500;
+      font-size: 16px;
+      position: sticky;
+      left: 0;
+      top: 0;
+      z-index: 30;
+    }
+    .sidebar-logo {
+      padding: 41px 24px;
+      margin-bottom: 20px;
+    }
+    .sidebar-logo img {
+      width: 214px;
+      height: 44px;
+    }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding-left: 24px;
+    }
+    .sidebar-item {
+      margin-bottom: 25px;
+    }
+    .sidebar-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 236px;
+      margin-bottom: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-toggle.open {
+      opacity: 1;
+    }
+    .sidebar-dropdown-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-dropdown-title img {
+      width: 20px;
+      height: 20px;
+    }
+    .sidebar-dropdown-title span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .sidebar-dropdown-toggle img.arrow {
+      width: 20px;
+      height: 20px;
+    }
+    .sidebar-dropdown-content {
+      display: none;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-content.open {
+      display: block;
+    }
+    .sidebar-dropdown-links {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      padding-left: 28px;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .sidebar-dropdown-link img {
+      width: 11px;
+      height: 11px;
+    }
+    .sidebar-mobile {
+      display: none;
+      background: #261148;
+      width: 380px;
+      height: 100vh;
+      padding-bottom: 80px;
+      transition: all 0.3s ease-in-out;
+      border-right: 4px solid rgba(20, 9, 38, 0.1);
+      flex-direction: column;
+      font-weight: 500;
+      font-size: 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 111;
+    }
+    .sidebar-mobile.show {
+      display: flex;
+    }
+    .sidebar-mobile-toggle {
+      display: none;
+      cursor: pointer;
+      width: 100vw;
+      height: 50px;
+      background: #261148;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      position: fixed;
+      bottom: 0;
+      z-index: 1111;
+      justify-content: center;
+      align-items: center;
+    }
+    .sidebar-mobile-toggle img {
+      width: 20px;
+      height: auto;
+      transition: transform 0.3s ease-in-out;
+    }
+    .sidebar-mobile-toggle img.rotate {
+      transform: rotate(180deg);
+    }
+
+    /* AiVideoCreator container */
+    .ai-video-creator {
+      flex: 1;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Background images */
+    .bg-top {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 0;
+      width: 372px;
+      height: auto;
+    }
+    .bg-bottom {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 0;
+      width: 532px;
+      height: auto;
+    }
+
+    @media (max-width: 600px){
+      .bg-top, .bg-bottom{
+         display: none;
+      }
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      height: 78px;
+      display: flex;
+      gap: 22px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      background: #31164D;
+      z-index: 50;
+    }
+    .navbar a, .navbar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 19.2px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .navbar a:hover, .navbar-item:hover {
+      opacity: 75%;
+    }
+    .navbar img {
+      height: auto;
+    }
+    .navbar-upload {
+      width: 92px;
+      height: 24px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 1px solid #CF36E9;
+      border-radius: 18px;
+      cursor: pointer;
+    }
+    .navbar-upload img {
+      width: 12px;
+      height: 6px;
+    }
+    .navbar-bell img {
+      width: 20px;
+      height: auto;
+      cursor: pointer;
+    }
+    .navbar-bell:hover {
+      opacity: 75%;
+    }
+    .navbar-user {
+      width: 174px;
+      height: 37px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+    }
+    .navbar-user-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .navbar-user img {
+      width: 37px;
+      height: 37px;
+    }
+    .navbar-user-chevron img {
+      width: 12px;
+      height: 6px;
+    }
+    .navbar-dropdown, .navbar-user-dropdown, .navbar-upload-dropdown, .navbar-bell-dropdown {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      background: #31164D;
+      border-radius: 12px;
+      padding: 20px;
+      gap: 20px;
+      z-index: 60;
+      border: 1px solid #ce36e963;
+      font-size: 12px;
+    }
+    .navbar-dropdown.show, .navbar-user-dropdown.show, .navbar-upload-dropdown.show, .navbar-bell-dropdown.show {
+      display: flex;
+    }
+    .navbar-dropdown{
+      width: fit-content;
+      flex-direction: column;
+      top: 50px;
+      
+    }
+    .navbar-user-dropdown {
+      top: 78px;
+      right: 10px;
+      width: fit-content;
+    }
+    .navbar-upload-dropdown {
+      top: 78px;
+      right: 320px;
+      width: fit-content;
+    }
+    .navbar-bell-dropdown {
+      top: 78px;
+      right: 20px;
+      width: fit-content;
+      max-width: 400px;
+    }
+    .navbar-mobile-toggle {
+      display: none;
+    }
+    .navbar-mobile-toggle img {
+      width: 30px;
+      height: auto;
+      transition: transform 0.7s;
+    }
+    .navbar-mobile-toggle img.rotate {
+      transform: rotate(180deg);
+    }
+    .experiment, .analytics, .record-screen, .teams{
+      cursor: pointer;
+    }
+
+    /* Content area */
+    .content {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      padding-top: 40px;
+      padding-bottom: 160px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-title img {
+      width: 24.35px;
+      height: 24.35px;
+    }
+    .header-title h1 {
+      font-size: 24px;
+      font-weight: 500;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .upload-label {
+      width: 92px;
+      height: 24px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .upload-label:hover {
+      opacity: 75%;
+    }
+    .upload-label img {
+      width: 12px;
+      height: 6px;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      position: relative;
+    }
+    .search-container {
+      display: flex;
+      align-items: center;
+      border: 0.86px solid #CF36E9;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .search-container.collapsed {
+      width: 30px;
+      height: 30px;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .search-container.expanded {
+      width: 298px;
+      height: 35.14px;
+      padding: 9px 11px;
+      border-radius: 19px;
+    }
+    .search-input {
+      display: none;
+      font-size: 12px;
+      font-weight: 400;
+      color: #D9D9D9;
+      background: transparent;
+      width: 100%;
+      transition: all 0.3s;
+    }
+    .search-input.show {
+      display: block;
+    }
+    .search-icon img {
+      width: 17.14px;
+      height: 17.14px;
+    }
+
+    /* Upgrade Link */
+    .upgrade-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid #CF36E9;
+      background: rgba(187, 90, 204, 0.37);
+      margin-top: 40px;
+      cursor: pointer;
+      z-index: 11;
+    }
+    .upgrade-text {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .upgrade-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .upgrade-action img {
+      width: 24px;
+      height: 24px;
+    }
+    .upgrade-action span {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    /* Video Count */
+    .video-count {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 0;
+    }
+    .video-count span {
+      font-size: 13.43px;
+      background: #341E58;
+      width: 26px;
+      height: 26px;
+      border-radius: 3.35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Video Grid */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* Video Card */
+    .video-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .video-card img.thumbnail {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .video-card-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+      cursor: pointer;
+    }
+    .video-card-link img {
+      width: 24px;
+      height: 24px;
+    }
+    .video-card-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .video-card-generated {
+      font-size: 14px;
+      color: #CF36E9;
+    }
+    .video-card-time {
+      font-size: 12px;
+      font-weight: 500;
+      color: #8C8C8C;
+    }
+
+    /* Utils Card */
+    .utils-card {
+      position: absolute;
+      z-index: 11111;
+      bottom: -160px;
+      width: 282px;
+      height: 150px;
+      border-radius: 8px;
+      background: #140926;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.3s ease-in-out;
+    }
+    .utils-action {
+      background: #9413e6;
+      padding: 8px;
+      width: 262px;
+      height: 40px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .utils-action:hover {
+      opacity: 75%;
+    }
+    .utils-action span {
+      font-size: 12.51px;
+      font-weight: 500;
+    }
+    .utils-action img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Prompt Modal */
+    .prompt-modal {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(2px);
+      z-index: 50;
+      justify-content: center;
+      align-items: center;
+    }
+    .prompt-modal.show {
+      display: flex;
+    }
+    .prompt-content {
+      width: 504px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      align-items: center;
+      background: #140926;
+    }
+    .prompt-icon i {
+      font-size: 50px;
+      color: #ffffff;
+    }
+    .prompt-content h3 {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .prompt-message {
+      font-size: 14px;
+      font-weight: 500;
+      color: #8C8C8C;
+    }
+    .prompt-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .prompt-cancel {
+      height: 44px;
+      border: 1px solid #261148;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #8C8C8C;
+    }
+    .prompt-delete {
+      height: 44px;
+      background: #CF36E9;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .sidebar {
+        display: none;
+      }
+      .sidebar-mobile-toggle {
+        display: flex;
+      }
+    }
+    @media (max-width: 640px) {
+      .header {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .header-actions {
+        flex-direction: column;
+      }
+      .upgrade-link {
+        flex-direction: column;
+        gap: 8 ;
+      }
+      .upgrade-text {
+        text-align: center;
+        font-size: 14px;
+      }
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+      .video-count {
+        align-self: center;
+      }
+      .navbar a, .navbar-item {
+        display: none;
+      }
+      .navbar-mobile-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 19.2px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .navbar-mobile-toggle:hover {
+       opacity: 75%;
+      }
+      .navbar-upload {
+        width: fit-content;
+        padding: 8px;
+        font-size: 10px;
+      }
+      .navbar-upload img {
+        width: 8px;
+      }
+      .navbar-user {
+        width: fit-content;
+      }
+      .navbar-user-text {
+        font-size: 8px;
+      }
+      .navbar-user img {
+        width: 24px;
+        height: 24px;
+      }
+      .navbar-user-dropdown, .navbar-upload-dropdown, .navbar-bell-dropdown {
+        width: fit-content;
+        right: 0;
+        padding: 20px;
+      }
+      .prompt-content {
+        width: 100%;
+      }
+    }
+    @media (max-width: 1280px) {
+      .navbar a div, .navbar-item div {
+        font-size: 12px;
+      }
+    }
+    @media (max-width: 768px) {
+      .navbar a div, .navbar-item div {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="./assets/images/logo.png" alt="logo">
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-item">
+          <div class="sidebar-dropdown-toggle" data-id="ai-video-creator">
+            <div class="sidebar-dropdown-title">
+              <img src="./assets/images/ai-magic.png" alt="Ai Video Creator">
+              <span>Ai Video Creator</span>
+            </div>
+            <img class="arrow" src="./assets/images/arrow-down.png" alt="toggle">
+          </div>
+          <div class="sidebar-dropdown-content" data-id="ai-video-creator">
+            <div class="sidebar-dropdown-links">
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="./assets/images/dot3.png" alt="active" style="display: none;">
+                <a href="./views/avatar.html">Avatar</a>
+              </div>
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="./assets/images/dot3.png" alt="active" style="display: none;">
+                <a href="./views/voices.html">Voices</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Mobile Sidebar -->
+    <aside id="sidebar-mobile" class="sidebar-mobile">
+      <div class="sidebar-logo">
+        <img src="./assets/images/logo.png" alt="logo">
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-item">
+          <div class="sidebar-dropdown-toggle" data-id="ai-video-creator-mobile">
+            <div class="sidebar-dropdown-title">
+              <img src="./assets/images/ai-magic.png" alt="Ai Video Creator">
+              <span>Ai Video Creator</span>
+            </div>
+            <img class="arrow" src="./assets/images/arrow-down.png" alt="toggle">
+          </div>
+          <div class="sidebar-dropdown-content" data-id="ai-video-creator-mobile">
+            <div class="sidebar-dropdown-links">
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="./assets/images/dot3.png" alt="active" style="display: none;">
+                <a href="./views/avatar.html">Avatar</a>
+              </div>
+              <div class="sidebar-dropdown-link">
+                <img class="active-dot" src="./assets/images/dot3.png" alt="active" style="display: none;">
+                <a href="./views/voices.html">Voices</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Mobile Sidebar Toggle -->
+    <nav id="sidebar-mobile-toggle" class="sidebar-mobile-toggle">
+      <img id="sidebar-toggle-icon" class="rotate" src="./assets/images/chevron-down.png" alt="chevron">
+    </nav>
+
+    <!-- AiVideoCreator -->
+    <div class="ai-video-creator">
+      <img class="bg-top" src="./assets/images/bgtop.png" alt="bg svg">
+      <img class="bg-bottom" src="./assets/images/bgbottom.png" alt="bg svg two">
+
+      <!-- Navbar -->
+      <div class="navbar">
+        <a href="#">
+          <img src="./assets/images/experiment.png" alt="icon" width="20">
+          <div>Experiments</div>
+        </a>
+        <a href="#">
+          <img src="./assets/images/analytics.png" alt="icon two" width="17">
+          <div>Analytics</div>
+        </a>
+        <a href="#">
+          <img src="./assets/images/teams.png" alt="icon three" width="17">
+          <div>Teams</div>
+        </a>
+        <a href="#" class="navbar-item">
+          <img src="./assets/images/screenrecord.png" alt="icon four" width="23">
+          <div>Record Screen</div>
+        </a>
+        <div class="navbar-mobile-toggle">
+          <img id="navbar-toggle" src="./assets/images/arrow-down.png" alt="dropdown" width="30">
+        </div>
+        <div class="navbar-upload" id="navbar-upload">
+          Upload
+          <img src="./assets/images/chevron-down.png" alt="drop down">
+        </div>
+        <div class="navbar-bell" id="navbar-bell">
+          <img src="./assets/images/bell.png" alt="bell" width="20">
+        </div>
+        <div class="navbar-user" id="navbar-user">
+          <div class="navbar-user-text">
+            <div>Welcome</div>
+            <div>Administrator hello</div>
+          </div>
+          <img src="./assets/images/user-avatar.png" alt="user profile">
+          <div class="navbar-user-chevron">
+            <img src="./assets/images/chevron-down.png" alt="chevron" style="width: 12px; height: auto;">
+          </div>
+        </div>
+        <div id="navbar-dropdown" class="navbar-dropdown">
+            <div class="experiment">Experiments</div>
+            <div class="analytics">Analytics</div>
+            <div class="teams">Teams</div>
+            <div class="record-screen">Record Screen</div>
+        </div>
+        <div id="navbar-user-dropdown" class="navbar-user-dropdown" aria-labelledby="triggerId">
+          <div class="dropdown-top pb-2" style="border-bottom: 5px solid #CF36E9;">
+              @Therockjohnson <br>
+              Dwaynejohnson@Gmail.Com
+          </div>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+              <i class="fa-regular fa-user"></i>
+              My Account
+          </a>
+
+
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-regular fa-file-lines"></i>
+              Billing
+          </a>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-solid fa-up-right-from-square"></i>
+              Upgrade
+          </a>
+          <a class="dropdown-item" href="#" style="font-size: 12px;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
+          </a>
+
+      </div>
+        <div id="navbar-upload-dropdown" style="font-size: 12px; cursor: pointer;" class="navbar-upload-dropdown">
+         upload video
+        </div>
+        <div id="navbar-bell-dropdown" class="navbar-bell-dropdown" aria-labelledby="triggerId">
+          <div class="notification-inner d-flex flex-column gap-2">
+              <div class="notification-head d-flex align-items-center justify-content-center gap-2">
+                <i class="fa-solid fa-bell" style="color: #CF36E9"></i>
+                  <h2 class="title">
+                      Latest Changes
+                  </h2>
+              </div>
+              <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+                  <div class="top d-flex items-center gap-2">
+                      <span class="tag px-2" style="background: #CF36E9;">
+                          New
+                      </span>
+                      <span class="title" style="font-weight: 600;">
+                          New Improvement And Updates
+                      </span>
+                  </div>
+                  <div class="notification-body">
+                      Good news! New upgrades & improvement are LIVE!
+                      TEXT to speech, we have more..
+                  </div>
+              </div>
+              <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+                <div class="top d-flex items-center gap-2">
+                    <span class="tag px-2" style="background: #CF36E9;">
+                        New
+                    </span>
+                    <span class="title" style="font-weight: 600;">
+                        New Improvement And Updates
+                    </span>
+                </div>
+                <div class="notification-body">
+                    Good news! New upgrades & improvement are LIVE!
+                    TEXT to speech, we have more..
+                </div>
+            </div>
+            <div class="notification-item p-2 d-flex flex-column gap-2" style="border: 1px solid #ffffff46; border-radius: 8px;">
+              <div class="top d-flex items-center gap-2">
+                  <span class="tag px-2" style="background: #CF36E9;">
+                      New
+                  </span>
+                  <span class="title" style="font-weight: 600;">
+                      New Improvement And Updates
+                  </span>
+              </div>
+              <div class="notification-body">
+                  Good news! New upgrades & improvement are LIVE!
+                  TEXT to speech, we have more..
+              </div>
+          </div>
+
+           
+          </div>
+      </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <div class="header">
+          <div class="header-title">
+            <img src="./assets/images/ai-magic.png" alt="ai magic">
+            <h1>Ai Video Creator</h1>
+          </div>
+          <div class="header-actions">
+            <div class="search-bar">
+              <div id="search-container" class="search-container collapsed">
+                <input id="search-input" class="search-input" type="text" placeholder="Enter text">
+                <div class="search-icon">
+                  <img src="./assets/images/search-icon.png" alt="Search Icon">
+                </div>
+              </div>
+            </div>
+            <label for="uploadnow" class="upload-label">
+              Upload
+              <img src="./assets/images/chevron-down.png" alt="drop down">
+            </label>
+            <input type="file" id="uploadnow" style="display: none;">
+          </div>
+        </div>
+
+        <a href="#" class="upgrade-link">
+          <div class="upgrade-text">Get more and take your content to the next level</div>
+          <div class="upgrade-action">
+            <img src="./assets/images/ai-magic.png" alt="ai magic">
+            <span>UPGRADE</span>
+          </div>
+        </a>
+
+        <div class="video-count">
+          Video
+          <span id="video-count">0</span>
+        </div>
+
+        <div class="video-grid" id="video-grid">
+          <!-- Video cards will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prompt Modal -->
+  <div id="prompt-modal" class="prompt-modal">
+    <div class="prompt-content">
+      <div class="prompt-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <h3>Are You Sure?</h3>
+      <p class="prompt-message">Are you sure you want to delete style?</p>
+      <div class="prompt-actions">
+        <button id="prompt-cancel" class="prompt-cancel">Cancel</button>
+        <button id="prompt-delete" class="prompt-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const MOCK_VIDEOS = [
+      { id: 1, heading: 'Web developer Alex Story', image: './assets/images/person3.png', time: 'Edited 1 Day Ago', isGenerated: false },
+      { id: 2, heading: 'Web developer Alex Story', image: './assets/images/person1.png', time: 'Edited 1 Day Ago', isGenerated: true },
+      { id: 3, heading: 'Web developer Alex Story', image: './assets/images/person2.png', time: 'Edited 1 Day Ago', isGenerated: true },
+    ];
+
+    let searchTerm = '';
+    let selectedFile = null;
+    let isDrop = false;
+    let expandedSearch = false;
+    let activeUtilsCard = null;
+    let activePrompt = null;
+    let isOpen = {};
+    let activeLink = null;
+    let showBar = false;
+    let activeDropdown = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      localStorage.setItem('FOOTAGE_FROM_VD', '');
+      renderVideos(MOCK_VIDEOS);
+      initializeSidebar();
+
+      // Navbar dropdown toggle
+      const navbarToggle = document.getElementById('navbar-toggle');
+      const navbarDropdown = document.getElementById('navbar-dropdown');
+      navbarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isDrop = !isDrop;
+        closeOtherDropdowns('navbar-dropdown');
+        navbarDropdown.classList.toggle('show', isDrop);
+        navbarToggle.classList.toggle('rotate', isDrop);
+        activeDropdown = isDrop ? navbarDropdown : null;
+      });
+
+      // Navbar user dropdown
+      const navbarUser = document.getElementById('navbar-user');
+      const navbarUserDropdown = document.getElementById('navbar-user-dropdown');
+      navbarUser.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarUserDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-user-dropdown');
+        navbarUserDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarUserDropdown;
+      });
+
+      // Navbar upload dropdown
+      const navbarUpload = document.getElementById('navbar-upload');
+      const navbarUploadDropdown = document.getElementById('navbar-upload-dropdown');
+      navbarUpload.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarUploadDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-upload-dropdown');
+        navbarUploadDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarUploadDropdown;
+      });
+
+      // Navbar bell dropdown
+      const navbarBell = document.getElementById('navbar-bell');
+      const navbarBellDropdown = document.getElementById('navbar-bell-dropdown');
+      navbarBell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShowing = navbarBellDropdown.classList.contains('show');
+        closeOtherDropdowns('navbar-bell-dropdown');
+        navbarBellDropdown.classList.toggle('show', !isShowing);
+        activeDropdown = isShowing ? null : navbarBellDropdown;
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener('click', (e) => {
+        if (activeDropdown && !activeDropdown.contains(e.target)) {
+          activeDropdown.classList.remove('show');
+          if (activeDropdown === navbarDropdown) {
+            isDrop = false;
+            navbarToggle.classList.remove('rotate');
+          }
+          activeDropdown = null;
+        }
+      });
+
+          // Mobile navbar links
+          document.querySelectorAll('.experiment, .analytics, .record-screen, .teams')
+      .forEach(navlink=> {
+        navlink.addEventListener('click', ()=> {
+          window.location.href='#';
+        })
+      })
+
+      // Search bar
+      const searchContainer = document.getElementById('search-container');
+      const searchInput = document.getElementById('search-input');
+      searchContainer.addEventListener('click', () => {
+        if (!expandedSearch) {
+          expandedSearch = true;
+          searchContainer.classList.remove('collapsed');
+          searchContainer.classList.add('expanded');
+          searchInput.classList.add('show');
+          searchInput.focus();
+        }
+      });
+      searchInput.addEventListener('input', (e) => {
+        searchTerm = e.target.value;
+        const filteredVideos = MOCK_VIDEOS.filter(video =>
+          video.heading.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        renderVideos(filteredVideos);
+      });
+      document.addEventListener('click', (e) => {
+        if (!searchContainer.contains(e.target) && expandedSearch) {
+          expandedSearch = false;
+          searchContainer.classList.remove('expanded');
+          searchContainer.classList.add('collapsed');
+          searchInput.classList.remove('show');
+        }
+      });
+
+      // File upload
+      const uploadInput = document.getElementById('uploadnow');
+      uploadInput.addEventListener('change', (e) => {
+        selectedFile = e.target.files[0];
+      });
+
+      // Close utils card on outside click
+      document.addEventListener('mousedown', (e) => {
+        if (activeUtilsCard && !activeUtilsCard.contains(e.target)) {
+          activeUtilsCard.style.display = 'none';
+          activeUtilsCard = null;
+        }
+      });
+    });
+
+    // Close all other dropdowns except the one specified
+    function closeOtherDropdowns(exceptId) {
+      const dropdowns = [
+        'navbar-dropdown',
+        'navbar-user-dropdown',
+        'navbar-upload-dropdown',
+        'navbar-bell-dropdown'
+      ];
+      dropdowns.forEach(id => {
+        if (id !== exceptId) {
+          const dropdown = document.getElementById(id);
+          if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+            if (id === 'navbar-dropdown') {
+              isDrop = false;
+              document.getElementById('navbar-toggle').classList.remove('rotate');
+            }
+          }
+        }
+      });
+      activeDropdown = null;
+    }
+
+    // Sidebar initialization
+    function initializeSidebar() {
+      const menuItems = [
+        {
+          id: 'ai-video-creator',
+          links: [
+            { href: './views/avatar.html', label: 'Avatar' },
+            { href: './views/voices.html', label: 'Voices' },
+          ],
+        },
+      ];
+
+      // Set active link based on current URL
+      const path = window.location.pathname;
+      menuItems.forEach(item => {
+        const active = item.links.find(link => link.href === path);
+        if (active) {
+          activeLink = { parentId: item.id, link: active.href };
+          isOpen[item.id] = true;
+          updateSidebar();
+        }
+      });
+
+      // Dropdown toggles
+      document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          const id = toggle.dataset.id;
+          isOpen[id] = !isOpen[id];
+          updateSidebar();
+        });
+      });
+
+      // Link clicks
+      document.querySelectorAll('.sidebar-dropdown-link a').forEach(link => {
+        link.addEventListener('click', () => {
+          const parentId = link.closest('.sidebar-dropdown-content').dataset.id.replace('-mobile', '');
+          activeLink = { parentId, link: link.getAttribute('href') };
+          updateSidebar();
+        });
+      });
+
+      // Mobile sidebar toggle
+      const mobileToggle = document.getElementById('sidebar-mobile-toggle');
+      const mobileSidebar = document.getElementById('sidebar-mobile');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+      mobileToggle.addEventListener('click', () => {
+        showBar = !showBar;
+        mobileSidebar.classList.toggle('show', showBar);
+        toggleIcon.classList.toggle('rotate', !showBar);
+      });
+    }
+
+    // Update sidebar UI
+    function updateSidebar() {
+      document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
+        const id = toggle.dataset.id;
+        const content = document.querySelector(`.sidebar-dropdown-content[data-id="${id}"]`);
+        toggle.classList.toggle('open', isOpen[id]);
+        content.classList.toggle('open', isOpen[id]);
+      });
+
+      document.querySelectorAll('.sidebar-dropdown-link').forEach(link => {
+        const href = link.querySelector('a').getAttribute('href');
+        const parentId = link.closest('.sidebar-dropdown-content').dataset.id.replace('-mobile', '');
+        const dot = link.querySelector('.active-dot');
+        dot.style.display = (activeLink && activeLink.parentId === parentId && activeLink.link === href) ? 'block' : 'none';
+      });
+    }
+
+    // Render video cards
+    function renderVideos(videos) {
+      const videoGrid = document.getElementById('video-grid');
+      const videoCount = document.getElementById('video-count');
+      videoCount.textContent = videos.length;
+      videoGrid.innerHTML = videos.map(video => `
+        <div class="video-card" data-id="${video.id}">
+          <div class="utils-card" style="display: none;">
+            <div class="utils-action" data-action="delete">
+              <span>Delete</span>
+              <img src="./assets/images/delete.png" alt="Delete">
+            </div>
+            <div class="utils-action" data-action="edit">
+              <span>Edit</span>
+              <img src="./assets/images/pencil-edit.png" alt="Edit">
+            </div>
+            <div class="utils-action" data-action="download">
+              <span>Download</span>
+              <img src="./assets/images/cloud-download.png" alt="Download">
+            </div>
+          </div>
+          <img class="thumbnail" src="${video.image}" alt="person thumbnail">
+          <a href="#" class="video-card-link">
+            ${video.heading}
+            <img src="./assets/images/vertical-circles.png" alt="more options">
+          </a>
+          <div class="video-card-info">
+            ${video.isGenerated ? '<div class="video-card-generated">GENERATED</div>' : ''}
+            <div class="video-card-time">${video.time}</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Add event listeners for utils card
+      document.querySelectorAll('.video-card').forEach(card => {
+        const utilsCard = card.querySelector('.utils-card');
+        const moreOptions = card.querySelector('.video-card-link img');
+        moreOptions.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (activeUtilsCard && activeUtilsCard !== utilsCard) {
+            activeUtilsCard.style.display = 'none';
+          }
+          utilsCard.style.display = utilsCard.style.display === 'none' ? 'flex' : 'none';
+          activeUtilsCard = utilsCard.style.display === 'flex' ? utilsCard : null;
+        });
+
+        card.querySelectorAll('.utils-action').forEach(action => {
+          action.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const actionType = action.dataset.action;
+            const id = card.dataset.id;
+            if (actionType === 'delete') {
+              showPrompt(id);
+            } else if (actionType === 'edit') {
+              console.log('Trigger edit modal or action here');
+            } else if (actionType === 'download') {
+              console.log('Will download videos');
+            }
+          });
+        });
+      });
+    }
+
+    // Show prompt modal
+    function showPrompt(id) {
+      const promptModal = document.getElementById('prompt-modal');
+      const promptCancel = document.getElementById('prompt-cancel');
+      const promptDelete = document.getElementById('prompt-delete');
+      promptModal.classList.add('show');
+      activePrompt = id;
+
+      promptCancel.addEventListener('click', () => {
+        promptModal.classList.remove('show');
+        activePrompt = null;
+      }, { once: true });
+
+      promptDelete.addEventListener('click', () => {
+        MOCK_VIDEOS.splice(MOCK_VIDEOS.findIndex(video => video.id == id), 1);
+        renderVideos(MOCK_VIDEOS);
+        promptModal.classList.remove('show');
+        activePrompt = null;
+        if (activeUtilsCard) {
+          activeUtilsCard.style.display = 'none';
+          activeUtilsCard = null;
+        }
+      }, { once: true });
+
+      promptModal.addEventListener('click', () => {
+        promptModal.classList.remove('show');
+        activePrompt = null;
+      }, { once: true });
+    }
+  </script>
+</body>
+</html>
