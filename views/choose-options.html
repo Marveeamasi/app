@@ -344,7 +344,7 @@
     .container-back {
       position: absolute;
       left: 40px;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       color: #8C8C8C;
       cursor: pointer;
@@ -363,7 +363,7 @@
       align-items: center;
     }
     .container-title h1 {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 600;
     }
     .container-title p {
@@ -926,8 +926,8 @@
       height: 31px;
       background: #9413E6;
       border-radius: 3.13px;
-      font-size: 9.39px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 400;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1474,7 +1474,7 @@
             <div class="vf-section music">
               <div class="vf-toggle">
                 <div class="vf-label">
-                  <img src="../assets/images/subtitle.png" alt="music">
+                  <img src="../assets/images/music-note-square-02.png" alt="music">
                   <div>Music</div>
                 </div>
                 <div id="music-toggle" class="vf-toggle-switch off">
@@ -1539,9 +1539,9 @@
                 </div>
               </div>
             </div>
-            <div id="vf-continue-portrait" class="vf-continue" onclick="handleContinue()">Continue</div>
           </div>
         </div>
+        <div id="vf-continue-portrait" class="vf-continue" onclick="handleContinue()" style="align-self: center;">Continue</div>
       </div>
 
       <!-- Generating Overlay -->
@@ -1989,7 +1989,6 @@
       portraitIcon.src = isLandScape ? '../assets/images/portait.png' : '../assets/images/portraitred.png';
       continueLandscape.style.display = isLandScape ? 'flex' : 'none';
       continuePortrait.style.display = isLandScape ? 'none' : 'flex';
-      continuePortrait.style.alignSelf = isLandScape ? 'center' : 'end';
     }
 
     function initializeMedia() {
@@ -2401,6 +2400,11 @@
     function handleRetry() {
       error = false;
       document.getElementById('trouble-overlay').classList.remove('show');
+      handleContinue();
+    }
+   </script>
+</body>
+</html>tml>e('show');
       handleContinue();
     }
    </script>

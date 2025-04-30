@@ -25,6 +25,27 @@
       font-weight: normal;
       font-size: inherit;
     }
+    @keyframes fadeScaleOut {
+    0% {
+    opacity: 1;
+    transform: scale(1);
+    }
+    100% {
+    opacity: 0;
+    transform: scale(0.5);
+    }
+    }
+    
+    @keyframes fadeScaleIn {
+    0% {
+    opacity: 0;
+    transform: scale(0.5);
+    }
+    100% {
+    opacity: 1;
+    transform: scale(1);
+    }
+    }
 
     /* Main container */
     .main-container {
@@ -316,7 +337,7 @@
     .container-back {
       position: absolute;
       left: 40px;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       color: #8C8C8C;
       cursor: pointer;
@@ -346,7 +367,7 @@
     .container-skip {
       position: absolute;
       right: 40px;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       color: #CF36E9;
       cursor: pointer;
@@ -474,8 +495,8 @@
       align-items: center;
       width: 254px;
       height: 35px;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 400;
       background: #9413E6;
       border-radius: 4px;
       cursor: pointer;
@@ -953,4 +974,4 @@
     }
   </script>
 </body>
-</html>
+</html>>>

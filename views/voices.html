@@ -419,11 +419,11 @@
       gap: 8px;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
       z-index: 2;
     }
     .create-voices:hover {
-      animation: pulse 1s infinite;
+      opacity: 75%;
     }
     .voices-section {
       display: flex;
@@ -641,7 +641,7 @@
     .first-widget .buttons {
       color: #8C8C8C;
       font-weight: 500;
-      font-size: 14px;
+      font-size: 15px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
@@ -774,7 +774,7 @@
     .next-widget .buttons {
       color: #8C8C8C;
       font-weight: 500;
-      font-size: 14px;
+      font-size: 15px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
@@ -944,6 +944,39 @@
     .edit-widget .update:hover {
       background-color: #a112b8;
     }
+    .select.model {
+    position: relative;
+    user-select: none;
+    }
+    
+    .select.model .dropdown-model {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #261148;
+    border-radius: 8px;
+    margin-top: 4px;
+    z-index: 10;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .select.model .dropdown-model li {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    }
+    
+    .select.model .dropdown-model li:hover {
+    background-color: #3a1d66;
+    }
+    
+    .hidden-model {
+    display: none;
+    }
+    
     /* Generating */
     .generating {
       background-color: #261148;
@@ -1174,6 +1207,7 @@
       height: 44px;
       width: 100%;
       cursor: pointer;
+      text-align: center;
     }
     .delete-prompt .buttons .cancel {
       border: 1px solid #261148;
@@ -1536,11 +1570,15 @@
               <h1>Audio Name</h1>
               <input type="text" class="edit-audio-name" placeholder="Enter Audio name.">
             </div>
-            <div class="section">
+            <div class="section model">
               <h1>Model</h1>
-              <div class="select">
-                <div>Eleven Turbo</div>
+              <div class="select model" id="customSelect">
+                <div class="selected-model">Eleven Turbo</div>
                 <img src="../assets/images/arrow-down.png" alt="arrow down">
+                <ul class="dropdown-model hidden-model">
+                <li>Eleven Turbo</li>
+                <li>My Voices</li>
+                </ul>
               </div>
             </div>
             <div class="slider">
@@ -2207,6 +2245,28 @@ function createVoiceCard(voice, index, prefix = '') {
     isSuccess = false;
     alertBox.classList.remove('active');
   });
+  
+  // Handle model select
+  const select = document.getElementById('customSelect');
+  const dropdown = select.querySelector('.dropdown-model');
+  const selected = select.querySelector('.selected-model');
+  
+  select.addEventListener('click', (e) => {
+  e.stopPropagation(); // prevent event from reaching document
+  dropdown.classList.toggle('hidden-model');
+  });
+  
+  dropdown.querySelectorAll('li').forEach(item => {
+  item.addEventListener('click', () => {
+  selected.textContent = item.textContent;
+  dropdown.classList.add('hidden-model');
+  });
+  });
+  
+  document.addEventListener('click', () => {
+  dropdown.classList.add('hidden-model');
+  });
+  
 </script>
 </body>
 </html>

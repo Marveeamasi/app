@@ -345,7 +345,7 @@
     .container-back {
       position: absolute;
       left: 40px;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       color: #8C8C8C;
       cursor: pointer;
@@ -368,7 +368,7 @@
       font-weight: 600;
     }
     .container-title p {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 400;
       color: #CF36E9;
       display: flex;
@@ -382,7 +382,7 @@
       background: #CF36E9;
       color: #ffffff;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -391,10 +391,14 @@
     .container-skip {
       position: absolute;
       right: 40px;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       color: #CF36E9;
       cursor: pointer;
+      bottom: 20px;
+    }
+    .container-skip.two {
+      bottom: -20px;
     }
     .container-skip:hover {
       color: #ffffff;
@@ -595,6 +599,7 @@
       color: #dbdbdb;
       border: none;
       outline: none;
+      font-size: 12px;
     }
     .text-script-second-voice {
       display: flex;
@@ -675,7 +680,7 @@
       font-weight: 700;
     }
     .audio-script-first-description {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 300;
       color: #8C8C8C;
     }
@@ -743,8 +748,8 @@
       align-self: center;
       justify-content: center;
       align-items: center;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 400;
       cursor: pointer;
     }
     .progress-message {
@@ -915,7 +920,7 @@
       border-radius: 3.13px;
       border: 1px solid #9413E6;
       color: #9413E6;
-      font-size: 9.39px;
+      font-size: 15px;
       font-weight: 700;
       width: 122px;
       height: 31px;
@@ -925,7 +930,7 @@
     }
     .recording-modal-buttons button:last-child {
       border-radius: 3.13px;
-      font-size: 9.39px;
+      font-size: 15px;
       font-weight: 700;
       width: 122px;
       height: 31px;
@@ -1354,7 +1359,7 @@
             </p>
             <span class="container-skip" onclick="handleSkip()">Skip to editor</span>
           </div>
-          <span id="container-skip-second" class="container-skip" onclick="handleSkip()" style="display: none;">Skip to editor</span>
+          <span id="container-skip-second" class="container-skip two" onclick="handleSkip()" style="display: none;">Skip to editor</span>
         </div>
 
         <div id="container-content" class="container-content">
@@ -2211,4 +2216,4 @@
     window.handleContinueClick = handleContinueClick;
   </script>
 </body>
-</html>
+</html>l>l>

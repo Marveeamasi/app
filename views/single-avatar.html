@@ -924,7 +924,7 @@
         // Update DOM
         document.getElementById('avatar-title').textContent = `(${avatar.title.replace(/%20/g, ' ')})`;
         document.getElementById('avatar-thumbnail').src = `../assets/images/${avatar.image}`;
-        document.getElementById('avatar-style').textContent = avatar.style;
+        document.getElementById('avatar-style').textContent = avatarStyles.length;
         document.title = avatar.title;
         renderAvatarStyles();
       }
@@ -1193,6 +1193,7 @@
             }
           }
         }
+        document.getElementById('avatar-style').textContent = avatarStyles.length;
         currentStyleId = null;
       });
 
