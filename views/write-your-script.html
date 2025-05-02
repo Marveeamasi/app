@@ -1520,7 +1520,7 @@
     let showBar = false;
     let activeDropdown = null;
     let timerInterval = null;
-
+    let transcribedText = ''; // Store transcribed text
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
@@ -1530,72 +1530,72 @@
       initializeProgressBar();
     });
 
-     // Navbar dropdown toggle
-     const navbarToggle = document.getElementById('navbar-toggle');
-      const navbarDropdown = document.getElementById('navbar-dropdown');
-      navbarToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        isDrop = !isDrop;
-        closeOtherDropdowns('navbar-dropdown');
-        navbarDropdown.classList.toggle('show', isDrop);
-        navbarToggle.classList.toggle('rotate', isDrop);
-        activeDropdown = isDrop ? navbarDropdown : null;
-      });
+    // Navbar dropdown toggle
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarDropdown = document.getElementById('navbar-dropdown');
+    navbarToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      isDrop = !isDrop;
+      closeOtherDropdowns('navbar-dropdown');
+      navbarDropdown.classList.toggle('show', isDrop);
+      navbarToggle.classList.toggle('rotate', isDrop);
+      activeDropdown = isDrop ? navbarDropdown : null;
+    });
 
-      // Navbar user dropdown
-      const navbarUser = document.getElementById('navbar-user');
-      const navbarUserDropdown = document.getElementById('navbar-user-dropdown');
-      navbarUser.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShowing = navbarUserDropdown.classList.contains('show');
-        closeOtherDropdowns('navbar-user-dropdown');
-        navbarUserDropdown.classList.toggle('show', !isShowing);
-        activeDropdown = isShowing ? null : navbarUserDropdown;
-      });
+    // Navbar user dropdown
+    const navbarUser = document.getElementById('navbar-user');
+    const navbarUserDropdown = document.getElementById('navbar-user-dropdown');
+    navbarUser.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isShowing = navbarUserDropdown.classList.contains('show');
+      closeOtherDropdowns('navbar-user-dropdown');
+      navbarUserDropdown.classList.toggle('show', !isShowing);
+      activeDropdown = isShowing ? null : navbarUserDropdown;
+    });
 
-      // Navbar upload dropdown
-      const navbarUpload = document.getElementById('navbar-upload');
-      const navbarUploadDropdown = document.getElementById('navbar-upload-dropdown');
-      navbarUpload.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShowing = navbarUploadDropdown.classList.contains('show');
-        closeOtherDropdowns('navbar-upload-dropdown');
-        navbarUploadDropdown.classList.toggle('show', !isShowing);
-        activeDropdown = isShowing ? null : navbarUploadDropdown;
-      });
+    // Navbar upload dropdown
+    const navbarUpload = document.getElementById('navbar-upload');
+    const navbarUploadDropdown = document.getElementById('navbar-upload-dropdown');
+    navbarUpload.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isShowing = navbarUploadDropdown.classList.contains('show');
+      closeOtherDropdowns('navbar-upload-dropdown');
+      navbarUploadDropdown.classList.toggle('show', !isShowing);
+      activeDropdown = isShowing ? null : navbarUploadDropdown;
+    });
 
-      // Navbar bell dropdown
-      const navbarBell = document.getElementById('navbar-bell');
-      const navbarBellDropdown = document.getElementById('navbar-bell-dropdown');
-      navbarBell.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShowing = navbarBellDropdown.classList.contains('show');
-        closeOtherDropdowns('navbar-bell-dropdown');
-        navbarBellDropdown.classList.toggle('show', !isShowing);
-        activeDropdown = isShowing ? null : navbarBellDropdown;
-      });
+    // Navbar bell dropdown
+    const navbarBell = document.getElementById('navbar-bell');
+    const navbarBellDropdown = document.getElementById('navbar-bell-dropdown');
+    navbarBell.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isShowing = navbarBellDropdown.classList.contains('show');
+      closeOtherDropdowns('navbar-bell-dropdown');
+      navbarBellDropdown.classList.toggle('show', !isShowing);
+      activeDropdown = isShowing ? null : navbarBellDropdown;
+    });
 
-      // Close dropdowns on outside click
-      document.addEventListener('click', (e) => {
-        if (activeDropdown && !activeDropdown.contains(e.target)) {
-          activeDropdown.classList.remove('show');
-          if (activeDropdown === navbarDropdown) {
-            isDrop = false;
-            navbarToggle.classList.remove('rotate');
-          }
-          activeDropdown = null;
+    // Close dropdowns on outside click
+    document.addEventListener('click', (e) => {
+      if (activeDropdown && !activeDropdown.contains(e.target)) {
+        activeDropdown.classList.remove('show');
+        if (activeDropdown === navbarDropdown) {
+          isDrop = false;
+          navbarToggle.classList.remove('rotate');
         }
+        activeDropdown = null;
+      }
+    });
+
+    // Mobile navbar links
+    document.querySelectorAll('.experiment, .analytics, .record-screen, .teams')
+      .forEach(navlink => {
+        navlink.addEventListener('click', () => {
+          window.location.href = '#';
+        });
       });
 
-      // Mobile navbar links
-      document.querySelectorAll('.experiment, .analytics, .record-screen, .teams')
-      .forEach(navlink=> {
-        navlink.addEventListener('click', ()=> {
-          window.location.href='#';
-        })
-      })
-
-      // Close all other dropdowns except the one specified
+    // Close all other dropdowns except the one specified
     function closeOtherDropdowns(exceptId) {
       const dropdowns = [
         'navbar-dropdown',
@@ -1677,9 +1677,8 @@
         const content = document.querySelector(`.sidebar-dropdown-content[data-id="${id}"]`);
         toggle.classList.toggle('open', isOpen[id]);
         content.classList.toggle('open', isOpen[id]);
-     });
+      });
     }
-
 
     // Widget Helper Functions
     function resetAudioState() {
@@ -1692,6 +1691,7 @@
       isInitialRecordState = false;
       isRecordingState = false;
       isPausedState = false;
+      transcribedText = ''; // Reset transcribed text
       if (mediaStream) {
         mediaStream.getTracks().forEach(track => track.stop());
         mediaStream = null;
@@ -1705,6 +1705,46 @@
         timerInterval = null;
       }
       updateProgressBar();
+    }
+
+    // Audio-to-text transcription function using Web Speech API
+    async function transcribeAudio(audioUrl) {
+      return new Promise((resolve) => {
+        const audio = new Audio(audioUrl);
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        let resultText = '';
+        recognition.onresult = (event) => {
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            resultText += event.results[i][0].transcript + ' ';
+          }
+        };
+
+        recognition.onend = () => {
+          resolve(resultText.trim());
+          console.log(resultText)
+        };
+
+        recognition.onerror = (event) => {
+          console.error('Speech recognition error:', event.error);
+          resolve('');
+        };
+
+        audio.onloadedmetadata = () => {
+          audio.play();
+          recognition.start();
+          audio.onended = () => {
+            recognition.stop();
+          };
+        };
+
+        audio.onerror = () => {
+          resolve('');
+        };
+      });
     }
 
     function getTextScriptFirst() {
@@ -1768,7 +1808,7 @@
             <img src="../assets/images/scissors.png" alt="text icon">
             <div>Cut Your Script</div>
           </div>
-          <textarea id="script-textarea-second" class="text-script-second-textarea">${scriptText}</textarea>
+          <textarea id="script-textarea-second" class="text-script-second-textarea">${isAudio ? transcribedText : scriptText}</textarea>
           <div class="text-script-second-voice">
             <div class="text-script-second-voice-label">
               <div>
@@ -1838,16 +1878,31 @@
         document.getElementById('initial-record-modal').classList.add('show');
       });
 
-      uploadInput.addEventListener('change', () => {
+      uploadInput.addEventListener('change', async () => {
         uploadedFile = uploadInput.files[0];
         document.getElementById('upload-text').textContent = uploadedFile ? uploadedFile.name : 'Upload File';
         if (uploadedFile) {
-          isPausedState = false;
-          isSecondTextWidget = true;
-          isFirstTextWidget = false;
-          barWidth = 75;
-          updateWidget();
-          updateProgressBar();
+          // Check audio duration
+          const audio = new Audio(URL.createObjectURL(uploadedFile));
+          audio.onloadedmetadata = async () => {
+            const duration = audio.duration; // in seconds
+            if (duration > 20 * 60) { // 20 minutes
+              alert('Audio file must be less than 20 minutes.');
+              uploadedFile = null;
+              document.getElementById('upload-text').textContent = 'Upload File';
+              uploadInput.value = ''; // Reset input
+            } else {
+              // Transcribe uploaded audio
+              transcribedText = await transcribeAudio(URL.createObjectURL(uploadedFile));
+              isPausedState = false;
+              isSecondTextWidget = true;
+              isFirstTextWidget = false;
+
+              barWidth = 75;
+              updateWidget();
+              updateProgressBar();
+            }
+          };
         }
       });
     }
@@ -1928,7 +1983,7 @@
         handleClose();
       });
 
-      function handleRecording() {
+      async function handleRecording() {
         isRecordingState = true;
         isPausedState = false;
         isInitialRecordState = false;
@@ -1949,10 +2004,12 @@
             }
           };
 
-          mediaRecorder.onstop = () => {
+          mediaRecorder.onstop = async () => {
             if (chunks.length > 0) {
               const blob = new Blob(chunks, { type: 'audio/webm' });
               audioFromRecord = URL.createObjectURL(blob);
+              // Transcribe recorded audio
+              transcribedText = await transcribeAudio(audioFromRecord);
               pausedAudio.src = audioFromRecord;
               pausedContinue.classList.remove('disabled');
               pausedContinue.classList.add('enabled');
@@ -2014,10 +2071,12 @@
             }
           };
 
-          mediaRecorder.onstop = () => {
+          mediaRecorder.onstop = async () => {
             if (chunks.length > 0) {
               const blob = new Blob(chunks, { type: 'audio/webm' });
               audioFromRecord = URL.createObjectURL(blob);
+              // Transcribe recorded audio
+              transcribedText = await transcribeAudio(audioFromRecord);
               pausedAudio.src = audioFromRecord;
               pausedContinue.classList.remove('disabled');
               pausedContinue.classList.add('enabled');
@@ -2082,6 +2141,7 @@
         isRecordingState = false;
         isPausedState = false;
         time = 0;
+        transcribedText = ''; // Reset transcribed text
         initialModal.classList.remove('show');
         recordingModal.classList.remove('show');
         pausedModal.classList.remove('show');
@@ -2093,6 +2153,10 @@
         timerInterval = setInterval(() => {
           time += 1;
           document.getElementById('recording-timer').textContent = formatTime(time);
+          // Check if recording exceeds 20 minutes
+          if (time >= 20 * 60) { // 20 minutes
+            handlePause();
+          }
         }, 1000);
       }
 
@@ -2214,6 +2278,6 @@
     window.handleRetry = handleRetry;
     window.handleCancel = handleCancel;
     window.handleContinueClick = handleContinueClick;
-  </script>
+</script>
 </body>
-</html>l>l>
+</html>
