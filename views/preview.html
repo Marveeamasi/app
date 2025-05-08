@@ -805,13 +805,15 @@
       width: 150px;
     }
     .preview-timeline {
-      padding: 40px 40px 0 40px;
+      background: #1D1920;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px;
       width: 100%;
-    }
-    @media (max-width: 640px) {
-      .preview-timeline {
-        padding: 40px 0 0 0;
-      }
+      padding-bottom: 100px;
+      position: relative;
     }
     .preview-timeline-container {
       position: relative;
@@ -841,14 +843,96 @@
       width: 100%;
       height: 100%;
     }
+
+    .timeline-ruler {
+      position: relative;
+      height: 20px;
+      width: 100%;
+      min-width: 100%;
+    }
+
+    .ruler-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 1px;
+      background: #9CA3AF;
+    }
+
+    /* Time marker container */
+    .time-marker {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .marker-line {
+      width: 1px;
+      height: 5px;
+      background: #9CA3AF;
+    }
+
+    /* Time label */
+    .time-label {
+      margin-top: 1px;
+      font-size: 7px;
+      color: #9CA3AF;
+      white-space: nowrap;
+    }
+
+    /* Major markers (every 5 seconds) */
+    .time-marker.major .marker-line {
+      height: 10px;
+      background: #9CA3AF;
+    }
+  
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .time-marker:nth-child(2n+1) .time-label {
+        display: none;
+      }
+      
+      .marker-line {
+        height: 4px;
+      }
+      
+      .time-marker.major .marker-line {
+        height: 9px;
+      }
+    }
     .preview-timeline-drag {
       position: absolute;
-      width: 5px;
-      height: 100%;
-      background: #9413E6;
+      width: 5.08px;
+      height: auto;
       cursor: ew-resize;
       z-index: 10;
+      top: 30px;
     }
+    .bar-wrapper{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      position: relative;
+      align-items: start;
+    }
+      .bar-wrapper div div{
+      min-width: 150px;
+      height: 20px;
+      font-weight: 600px;
+      font-size: 8.12px;
+      overflow: hidden;
+      background: #352B3D;
+      border: 1.52px solid #31164D;
+    }
+    .bar-wrapper div img{
+       cursor: ew-resize;
+    }
+    
     .preview-generate {
       background: #9413E6;
       color: white;
@@ -1343,7 +1427,7 @@
           <div class="preview-controls-center">
             <img id="control-backward" src="../assets/images/go-backward-10-sec.png" alt="back 10s">
             <img id="control-previous" src="../assets/images/arrow-left-double.png" alt="prev">
-            <img id="control-play-pause" src="../assets/images/play.png" alt="play/pause">
+            <img id="control-play-pause" src="../assets/images/play1.png" alt="play/pause">
             <img id="control-next" src="../assets/images/arrow-right-double.png" alt="next">
             <img id="control-forward" src="../assets/images/go-forward-10-sec.png" alt="forward 10s">
           </div>
@@ -1352,12 +1436,91 @@
           </div>
         </div>
         <div class="preview-timeline">
+          <img id="timeline-drag" src="../assets/images/timelinedrag.png" alt="timelinedrag" class="preview-timeline-drag">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-content-center gap-2">
+              <img style="cursor: pointer;" src="../assets/images/undo.png" alt="undo">
+              <img style="cursor: pointer;" src="../assets/images/redo.png" alt="redo">
+              <img style="cursor: pointer;" src="../assets/images/trash.png" alt="trash">
+            </div>
+            <div class="d-flex align-content-center gap-2">
+              <img style="cursor: pointer;" src="../assets/images/zoomout.png" alt="zoomout">
+              <img style="cursor: pointer;" src="../assets/images/zoomin.png" alt="zoomin">
+              <img style="cursor: pointer;" src="../assets/images/expand.png" alt="expand">
+            </div>
+          </div>
+          <div class="timeline-ruler">
+            <!-- The thin ruler line -->
+            <div class="ruler-line"></div>
+            
+            <!-- Time markers (using percentage for responsiveness) -->
+            <div class="time-marker major" style="left: 0%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:00</div>
+            </div>
+            
+            <div class="time-marker" style="left: 5%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:01</div>
+            </div>
+            
+            <div class="time-marker" style="left: 10%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:02</div>
+            </div>
+            
+            <div class="time-marker" style="left: 15%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:03</div>
+            </div>
+            
+            <div class="time-marker" style="left: 20%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:04</div>
+            </div>
+            
+            <div class="time-marker major" style="left: 25%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:05</div>
+            </div>
+            
+            <!-- Continue pattern up to 100% -->
+            <div class="time-marker major" style="left: 50%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:10</div>
+            </div>
+            
+            <div class="time-marker major" style="left: 100%;">
+              <div class="marker-line"></div>
+              <div class="time-label">00:20</div>
+            </div>
+          </div>
+          <div id="timeline-canvas" class="w-100 d-flex flex-column gap-1 align-items-start">
+            <div class="bar-wrapper" id="music-bar">
+            <div class="d-flex align-items-center justify-content-center">
+              <img src="../assets/images/trimthumb.png" alt="trim thumb start">
+              <div class="d-flex justify-content-center align-items-center">Background music.mp3</div>
+              <img src="../assets/images/trimthumb.png" alt="trim thumb end">
+            </div>
+          </div>
+          <div class="bar-wrapper" id="broll-bar">
+            <div class="d-flex align-items-center justify-content-center">
+              <img src="../assets/images/trimthumb.png" alt="trim thumb start">
+              <div class="d-flex justify-content-center align-items-center">ai generated.png</div>
+              <img src="../assets/images/trimthumb.png" alt="trim thumb end">
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+              <img src="../assets/images/trimthumb.png" alt="trim thumb start">
+              <div class="d-flex justify-content-center align-items-center">google image.png</div>
+              <img src="../assets/images/trimthumb.png" alt="trim thumb end">
+            </div>
+          </div>
           <div id="timeline" class="preview-timeline-container">
             <div class="preview-timeline-grid" id="timeline-grid">
               <!-- Populated by JS -->
             </div>
-            <div id="timeline-drag" class="preview-timeline-drag"></div>
           </div>
+        </div>
         </div>
         <button id="generate-button" class="preview-generate">Generate</button>
         <canvas id="thumbnail-canvas" class="preview-canvas"></canvas>
@@ -1892,7 +2055,7 @@ subtitleDiv.classList.add(selectedOptions['Ai Caption'].toLowerCase())
       const container = document.getElementById('select-music-options');
       container.innerHTML = musicOptions.map(option => `
         <div class="sidebar-select-dropdown-option" onclick="selectOption('Music', '${option}')">
-          <img src="../assets/images/play.png" alt="play">
+          <img src="../assets/images/play1.png" alt="play">
           ${option}
         </div>
       `).join('');
@@ -1902,7 +2065,7 @@ subtitleDiv.classList.add(selectedOptions['Ai Caption'].toLowerCase())
       const container = document.getElementById('select-voice-options');
       container.innerHTML = filteredVoiceOptions.map(option => `
         <div class="sidebar-select-dropdown-option" onclick="selectOption('Voice', '${option}')">
-          <img src="../assets/images/play.png" alt="play">
+          <img src="../assets/images/play1.png" alt="play">
           ${option}
         </div>
       `).join('');
@@ -2162,7 +2325,7 @@ subtitleDiv.classList.add(selectedOptions['Ai Caption'].toLowerCase())
         video.play();
       }
       isplay = !isplay;
-      document.getElementById('control-play-pause').src = isplay ? '../assets/images/pause.png' : '../assets/images/play.png';
+      document.getElementById('control-play-pause').src = isplay ? '../assets/images/pause.png' : '../assets/images/play1.png';
     }
 
     function handleForward10s() {
@@ -2285,7 +2448,7 @@ subtitleDiv.classList.add(selectedOptions['Ai Caption'].toLowerCase())
         if (isplay) {
           video.pause();
           isplay = false;
-          document.getElementById('control-play-pause').src = '../assets/images/play.png';
+          document.getElementById('control-play-pause').src = '../assets/images/play1.png';
         }
       }
     }
