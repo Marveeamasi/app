@@ -827,6 +827,9 @@
       align-items: center;
       touch-action: none;
     }
+    .timeline-utils{
+      cursor: pointer;
+    }
     .preview-timeline-grid {
       display: grid;
       grid-template-columns: repeat(15, 1fr);
@@ -1439,14 +1442,14 @@
           <img id="timeline-drag" src="../assets/images/timelinedrag.png" alt="timelinedrag" class="preview-timeline-drag">
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-content-center gap-2">
-              <img style="cursor: pointer;" src="../assets/images/undo.png" alt="undo">
-              <img style="cursor: pointer;" src="../assets/images/redo.png" alt="redo">
-              <img style="cursor: pointer;" src="../assets/images/trash.png" alt="trash">
+              <img class="timeline-utils" id="undo" src="../assets/images/undo.png" alt="undo">
+              <img class="timeline-utils" id="redo" src="../assets/images/redo.png" alt="redo">
+              <img class="timeline-utils" id="trash" style="cursor: pointer;" src="../assets/images/trash.png" alt="trash">
             </div>
             <div class="d-flex align-content-center gap-2">
-              <img style="cursor: pointer;" src="../assets/images/zoomout.png" alt="zoomout">
-              <img style="cursor: pointer;" src="../assets/images/zoomin.png" alt="zoomin">
-              <img style="cursor: pointer;" src="../assets/images/expand.png" alt="expand">
+              <img class="timeline-utils" id="zoomout" src="../assets/images/zoomout.png" alt="zoomout">
+              <img class="timeline-utils" id="zoomin" style="cursor: pointer;" src="../assets/images/zoomin.png" alt="zoomin">
+              <img class="timeline-utils" id="expand" style="cursor: pointer;" src="../assets/images/expand.png" alt="expand">
             </div>
           </div>
           <div class="timeline-ruler">
@@ -1496,20 +1499,20 @@
             </div>
           </div>
           <div id="timeline-canvas" class="w-100 d-flex flex-column gap-1 align-items-start">
-            <div class="bar-wrapper" id="music-bar">
-            <div class="d-flex align-items-center justify-content-center">
+            <div class="bar-wrapper" id="music-wrapper">
+            <div class="music-bar d-flex align-items-center justify-content-center">
               <img src="../assets/images/trimthumb.png" alt="trim thumb start">
               <div class="d-flex justify-content-center align-items-center">Background music.mp3</div>
               <img src="../assets/images/trimthumb.png" alt="trim thumb end">
             </div>
           </div>
-          <div class="bar-wrapper" id="broll-bar">
-            <div class="d-flex align-items-center justify-content-center">
+          <div class="bar-wrapper" id="broll-wrapper">
+            <div class="broll-bar d-flex align-items-center justify-content-center">
               <img src="../assets/images/trimthumb.png" alt="trim thumb start">
               <div class="d-flex justify-content-center align-items-center">ai generated.png</div>
               <img src="../assets/images/trimthumb.png" alt="trim thumb end">
             </div>
-            <div class="d-flex align-items-center justify-content-center">
+            <div class="broll-bar d-flex align-items-center justify-content-center">
               <img src="../assets/images/trimthumb.png" alt="trim thumb start">
               <div class="d-flex justify-content-center align-items-center">google image.png</div>
               <img src="../assets/images/trimthumb.png" alt="trim thumb end">
