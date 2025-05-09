@@ -822,7 +822,6 @@
       gap: 10px;
       padding: 10px;
       width: 100%;
-      padding-bottom: 100px;
       position: relative;
     }
     .preview-timeline-container {
@@ -968,7 +967,8 @@
   position: absolute;
   width: 500px;
   height: 600px;
-  z-index: 10; /* Ensure it’s above the video */
+  z-index: 10; 
+  object-position: center;
 }
     .preview-generate:hover {
       opacity: 0.75;
@@ -2485,7 +2485,7 @@ function handleTrimMove(e) {
     const wrapper = document.getElementById(draggedBar.type === 'music' ? 'music-wrapper' : 'broll-wrapper');
     const rect = wrapper.getBoundingClientRect();
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    const dx = (clientX - draggedBar.startX) * 0.5; // Damping factor for smoother resizing
+    const dx = (clientX - draggedBar.startX) * 0.08; // Damping factor for smoother resizing
     const wrapperWidth = rect.width;
     const timePerPixel = duration / wrapperWidth;
     const minDuration = (150 / wrapperWidth) * duration; // Min width of 150px converted to time
@@ -2641,7 +2641,7 @@ function initializePreviewMain() {
   });
   expandBtn.addEventListener('click', () => {
     isTimelineExpanded = !isTimelineExpanded;
-    document.querySelector('.preview-timeline').style.height = isTimelineExpanded ? '300px' : '';
+    document.querySelector('.preview-timeline').style.paddingBottom = isTimelineExpanded ? '100px' : '';
     updateTimelineRuler();
   });
 
