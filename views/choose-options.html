@@ -413,11 +413,12 @@
         height: 180px;
       }
     }
-    .vf-video video {
+    .vf-video img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       border-radius: 8px;
+      object-position: center;
     }
     .vf-settings {
       width: 302px;
@@ -1356,7 +1357,7 @@
         <div class="vf-widget">
           <div class="vf-video-container">
             <div id="vf-video" class="vf-video portrait">
-              <video id="avatar-video" controls></video>
+              <img id="avatar-image" alt="avatar">
             </div>
             <div id="vf-continue-landscape" class="vf-continue" style="display: none;" onclick="handleContinue()">Continue</div>
           </div>
@@ -1631,7 +1632,7 @@
 
     // Function to apply video effects in real-time
     function applyVideoEffects() {
-      const video = document.getElementById('avatar-video');
+      const video = document.getElementById('avatar-image');
       const videoContainer = document.getElementById('vf-video');
       
       // Reset any existing filters or styles
@@ -1907,7 +1908,7 @@ subtitleDiv.classList.add(choosenVoiceForSpeech.toLowerCase());
           const parsedAvatars = JSON.parse(storedAvatars);
           avatar = parsedAvatars[0] || {};
           if (avatar.video) {
-            document.getElementById('avatar-video').src = avatar.video;
+            document.getElementById('avatar-image').src = '../assets/images/person-12.png';
           }
         } catch (err) {
           console.error('Error parsing avatars from localStorage:', err);
@@ -1954,7 +1955,7 @@ subtitleDiv.classList.add(choosenVoiceForSpeech.toLowerCase());
     }
 
     function setupVideoMusicSync() {
-      const video = document.getElementById('avatar-video');
+      const video = document.getElementById('avatar-image');
       video.addEventListener('play', () => {
         if (allowMusic && choosenMusic !== 'None' && backgroundMusic) {
           backgroundMusic.play();
