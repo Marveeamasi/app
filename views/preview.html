@@ -701,7 +701,17 @@
       justify-content: center;
       transition: all 0.3s ease-in-out;
       overflow: hidden;
+      position: relative;
     }
+        .broll-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1; /* Ensure it’s above the video */
+}
     .preview-video-container.landscape {
       width: 100%;
       height: 454px;
@@ -882,7 +892,7 @@
     /* Time label */
     .time-label {
       margin-top: 1px;
-      font-size: 7px;
+      font-size: 5.08px;
       color: #9CA3AF;
       white-space: nowrap;
     }
@@ -917,25 +927,28 @@
     }
     .bar-wrapper{
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
       position: relative;
-      align-items: start;
+      min-height: 20px;
     }
-      .bar-wrapper div div{
-      min-width: 150px;
-      height: 20px;
-      font-weight: 600px;
-      font-size: 8.12px;
-      overflow: hidden;
-      background: #352B3D;
-      border: 1.52px solid #31164D;
-    }
+    .music-bar, .broll-bar { position: absolute; display: flex; align-items: center; min-width: 150px; }
     .bar-wrapper div img{
        cursor: ew-resize;
     }
-    
+    .bar-body { 
+      flex-grow: 1;
+       background: #352B3D;
+       min-width: 130px;
+        display: flex;
+         align-items: center; 
+         justify-content: center;
+         cursor: pointer;
+         height: 20px;
+         border: 1.52px solid #31164D;
+         overflow: hidden;
+         font-weight: 600px;
+      font-size: 8.12px;
+        }
+    .broll-bar.selected .bar-body{  border: 2px solid #9413E6;}
     .preview-generate {
       background: #9413E6;
       color: white;
@@ -951,6 +964,12 @@
       align-items: center;
       cursor: pointer;
     }
+    .broll-overlay {
+  position: absolute;
+  width: 500px;
+  height: 600px;
+  z-index: 10; /* Ensure it’s above the video */
+}
     .preview-generate:hover {
       opacity: 0.75;
     }
@@ -1174,6 +1193,9 @@
       justify-content: center;
       cursor: pointer;
       z-index: 2;
+    }
+    .subtitle-overlay{
+      z-index: 100;
     }
   </style>
 </head>
@@ -1500,23 +1522,10 @@
           </div>
           <div id="timeline-canvas" class="w-100 d-flex flex-column gap-1 align-items-start">
             <div class="bar-wrapper" id="music-wrapper">
-            <div class="music-bar d-flex align-items-center justify-content-center">
-              <img src="../assets/images/trimthumb.png" alt="trim thumb start">
-              <div class="d-flex justify-content-center align-items-center">Background music.mp3</div>
-              <img src="../assets/images/trimthumb.png" alt="trim thumb end">
-            </div>
+
           </div>
           <div class="bar-wrapper" id="broll-wrapper">
-            <div class="broll-bar d-flex align-items-center justify-content-center">
-              <img src="../assets/images/trimthumb.png" alt="trim thumb start">
-              <div class="d-flex justify-content-center align-items-center">ai generated.png</div>
-              <img src="../assets/images/trimthumb.png" alt="trim thumb end">
-            </div>
-            <div class="broll-bar d-flex align-items-center justify-content-center">
-              <img src="../assets/images/trimthumb.png" alt="trim thumb start">
-              <div class="d-flex justify-content-center align-items-center">google image.png</div>
-              <img src="../assets/images/trimthumb.png" alt="trim thumb end">
-            </div>
+           
           </div>
           <div id="timeline" class="preview-timeline-container">
             <div class="preview-timeline-grid" id="timeline-grid">
@@ -1588,7 +1597,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-   // State
+ // State
 let showSlide = window.innerWidth > 1024;
 let blurbg = false;
 let selectName = '';
@@ -1627,7 +1636,7 @@ let zoomLevel = 1;
 let maxZoom = 3;
 let minZoom = 0.5;
 let isTimelineExpanded = false;
-let musicBar = { start: 0, end: 0, src: null };
+let musicBar = { start: 0, end: 0, src: null, musicDuration: 0 };
 let brollBars = [];
 let history = [];
 let historyIndex = -1;
@@ -1744,6 +1753,32 @@ function applyVideoEffects() {
   } else {
     videoContainer.style.boxShadow = '';
   }
+
+  // Handle b-roll image display
+  let brollDisplayed = false;
+  const brollOverlay = videoContainer.querySelector('.broll-overlay');
+  if (brollOverlay) brollOverlay.remove();
+
+  brollBars.forEach(broll => {
+    if (currentTime >= broll.start && currentTime <= broll.end) {
+      brollDisplayed = true;
+      const overlay = document.createElement('img');
+      overlay.className = 'broll-overlay';
+      overlay.src = broll.url;
+      overlay.style.position = 'absolute';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.objectFit = allowZoom ? 'cover' : 'contain';
+      videoContainer.appendChild(overlay);
+    }
+  });
+
+  if (!brollDisplayed) {
+    const existingOverlay = videoContainer.querySelector('.broll-overlay');
+    if (existingOverlay) existingOverlay.remove();
+  }
 }
 
 // Video and music sync
@@ -1751,7 +1786,7 @@ function setupVideoMusicSync() {
   const video = document.getElementById('preview-video');
   video.addEventListener('play', () => {
     if (selectedOptions.Music !== 'None' && backgroundMusic && currentTime >= musicBar.start && currentTime <= musicBar.end) {
-      backgroundMusic.currentTime = currentTime - musicBar.start;
+      backgroundMusic.currentTime = (currentTime - musicBar.start) % musicBar.musicDuration;
       backgroundMusic.play();
     }
   });
@@ -1769,22 +1804,24 @@ function setupVideoMusicSync() {
   video.addEventListener('seeked', () => {
     if (backgroundMusic) {
       if (currentTime >= musicBar.start && currentTime <= musicBar.end) {
-        backgroundMusic.currentTime = currentTime - musicBar.start;
+        backgroundMusic.currentTime = (currentTime - musicBar.start) % musicBar.musicDuration;
         if (isplay) backgroundMusic.play();
       } else {
         backgroundMusic.pause();
       }
     }
+    applyVideoEffects(); // Update b-roll display on seek
   });
   video.addEventListener('timeupdate', () => {
     if (backgroundMusic && isplay) {
       if (currentTime < musicBar.start || currentTime > musicBar.end) {
         backgroundMusic.pause();
       } else if (currentTime >= musicBar.start && currentTime <= musicBar.end && backgroundMusic.paused) {
-        backgroundMusic.currentTime = currentTime - musicBar.start;
+        backgroundMusic.currentTime = (currentTime - musicBar.start) % musicBar.musicDuration;
         backgroundMusic.play();
       }
     }
+    applyVideoEffects(); // Update b-roll display on timeupdate
   });
 }
 
@@ -2067,7 +2104,6 @@ function updateMusicOptions() {
 function updateVoiceOptions() {
   const container = document.getElementById('select-voice-options');
   container.innerHTML = filteredVoiceOptions.map(option => `
-    Selection of a voice
     <div class="sidebar-select-dropdown-option" onclick="selectOption('Voice', '${option}')">
       <img src="../assets/images/play1.png" alt="play">
       ${option}
@@ -2116,15 +2152,23 @@ function selectOption(name, option) {
       backgroundMusic = new Audio('../assets/music/demo-music.mp3');
       backgroundMusic.loop = false;
       backgroundMusic.volume = musicVolume;
-      musicBar = { start: 0, end: duration || 20, src: option };
-      updateMusicBar();
-      saveToHistory('music', { musicBar: { ...musicBar } });
+      backgroundMusic.onloadedmetadata = () => {
+        const musicDuration = backgroundMusic.duration;
+        musicBar = { 
+          start: 0, 
+          end: Math.min(musicDuration, duration || 20), 
+          src: option, 
+          musicDuration 
+        };
+        updateMusicBar();
+        saveToHistory('music', { musicBar: { ...musicBar } });
+      };
     } else {
       if (backgroundMusic) {
         backgroundMusic.pause();
         backgroundMusic = null;
       }
-      musicBar = { start: 0, end: 0, src: null };
+      musicBar = { start: 0, end: 0, src: null, musicDuration: 0 };
       updateMusicBar();
       saveToHistory('music', { musicBar: { ...musicBar } });
     }
@@ -2234,8 +2278,15 @@ function initializeLocalStorage() {
     backgroundMusic = new Audio(storedMusicSrc);
     backgroundMusic.loop = false;
     backgroundMusic.volume = musicVolume;
-    musicBar = { start: 0, end: duration || 20, src: storedMusic };
-    updateMusicBar();
+    backgroundMusic.onloadedmetadata = () => {
+      musicBar = { 
+        start: 0, 
+        end: Math.min(backgroundMusic.duration, duration || 20), 
+        src: storedMusic, 
+        musicDuration: backgroundMusic.duration 
+      };
+      updateMusicBar();
+    };
   }
 
   if (storedVoice && storedVoice !== 'None') {
@@ -2280,17 +2331,17 @@ function updateMusicBar() {
   wrapper.innerHTML = '';
   if (musicBar.src) {
     const bar = document.createElement('div');
-    bar.className = 'music-bar d-flex align-items-center justify-content-center';
+    bar.className = 'music-bar';
     bar.innerHTML = `
       <img src="../assets/images/trimthumb.png" alt="trim thumb start" class="trim-thumb start">
-      <div class="d-flex justify-content-center align-items-center">${musicBar.src}.mp3</div>
+      <div class="bar-body">${musicBar.src}.mp3</div>
       <img src="../assets/images/trimthumb.png" alt="trim thumb end" class="trim-thumb end">
     `;
     wrapper.appendChild(bar);
     const left = (musicBar.start / duration) * 100;
-    const width = ((musicBar.end - musicBar.start) / duration) * 100;
+    const width = Math.max(150, ((musicBar.end - musicBar.start) / duration) * wrapper.offsetWidth);
     bar.style.left = `${left}%`;
-    bar.style.width = `${width}%`;
+    bar.style.width = `${width}px`;
     addBarEventListeners(bar, 'music');
   }
 }
@@ -2300,24 +2351,24 @@ function updateBrollBars() {
   wrapper.innerHTML = '';
   brollBars.forEach((broll, index) => {
     const bar = document.createElement('div');
-    bar.className = 'broll-bar d-flex align-items-center justify-content-center';
+    bar.className = 'broll-bar';
     bar.dataset.index = index;
     bar.innerHTML = `
       <img src="../assets/images/trimthumb.png" alt="trim thumb start" class="trim-thumb start">
-      <div class="d-flex justify-content-center align-items-center">${broll.name}</div>
+      <div class="bar-body">${broll.name}</div>
       <img src="../assets/images/trimthumb.png" alt="trim thumb end" class="trim-thumb end">
     `;
     wrapper.appendChild(bar);
     const left = (broll.start / duration) * 100;
-    const width = ((broll.end - broll.start) / duration) * 100;
+    const width = Math.max(150, ((broll.end - broll.start) / duration) * wrapper.offsetWidth);
     bar.style.left = `${left}%`;
-    bar.style.width = `${width}%`;
+    bar.style.width = `${width}px`;
     addBarEventListeners(bar, 'broll');
   });
 }
 
 function addBarEventListeners(bar, type) {
-  const body = bar.querySelector('div');
+  const body = bar.querySelector('.bar-body');
   const startThumb = bar.querySelector('.trim-thumb.start');
   const endThumb = bar.querySelector('.trim-thumb.end');
 
@@ -2354,7 +2405,13 @@ function deselectBroll() {
 function handleBarDragStart(e, bar, type) {
   e.preventDefault();
   isDraggingBar = true;
-  draggedBar = { bar, type, index: type === 'broll' ? parseInt(bar.dataset.index) : null };
+  draggedBar = { 
+    bar, 
+    type, 
+    index: type === 'broll' ? parseInt(bar.dataset.index) : null,
+    startX: e.type.includes('touch') ? e.touches[0].clientX : e.clientX,
+    initialStart: type === 'music' ? musicBar.start : brollBars[parseInt(bar.dataset.index)].start
+  };
   document.addEventListener('mousemove', handleBarDragMove);
   document.addEventListener('touchmove', handleBarDragMove, { passive: false });
   document.addEventListener('mouseup', handleBarDragEnd);
@@ -2366,26 +2423,22 @@ function handleBarDragMove(e) {
     const wrapper = document.getElementById(draggedBar.type === 'music' ? 'music-wrapper' : 'broll-wrapper');
     const rect = wrapper.getBoundingClientRect();
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    let position = ((clientX - rect.left) / rect.width) * duration;
-    position = Math.max(0, Math.min(duration, position));
+    const dx = clientX - draggedBar.startX;
+    const wrapperWidth = rect.width;
+    const timePerPixel = duration / wrapperWidth;
+    let newStart = draggedBar.initialStart + (dx * timePerPixel);
+    newStart = Math.max(0, Math.min(duration, newStart));
+
     if (draggedBar.type === 'music') {
-      const durationBar = musicBar.end - musicBar.start;
-      musicBar.start = position;
-      musicBar.end = position + durationBar;
-      if (musicBar.end > duration) {
-        musicBar.end = duration;
-        musicBar.start = duration - durationBar;
-      }
+      const barDuration = musicBar.end - musicBar.start;
+      musicBar.start = newStart;
+      musicBar.end = Math.min(duration, newStart + barDuration);
       updateMusicBar();
     } else {
       const broll = brollBars[draggedBar.index];
-      const durationBar = broll.end - broll.start;
-      broll.start = position;
-      broll.end = position + durationBar;
-      if (broll.end > duration) {
-        broll.end = duration;
-        broll.start = duration - durationBar;
-      }
+      const barDuration = broll.end - broll.start;
+      broll.start = newStart;
+      broll.end = Math.min(duration, newStart + barDuration);
       updateBrollBars();
     }
   }
@@ -2410,7 +2463,13 @@ function handleTrimStart(e, bar, type, side) {
   e.preventDefault();
   isTrimming = true;
   trimSide = side;
-  draggedBar = { bar, type, index: type === 'broll' ? parseInt(bar.dataset.index) : null };
+  draggedBar = { 
+    bar, 
+    type, 
+    index: type === 'broll' ? parseInt(bar.dataset.index) : null,
+    startX: e.type.includes('touch') ? e.touches[0].clientX : e.clientX,
+    lastUpdate: Date.now()
+  };
   document.addEventListener('mousemove', handleTrimMove);
   document.addEventListener('touchmove', handleTrimMove, { passive: false });
   document.addEventListener('mouseup', handleTrimEnd);
@@ -2419,24 +2478,39 @@ function handleTrimStart(e, bar, type, side) {
 
 function handleTrimMove(e) {
   if (isTrimming && draggedBar) {
+    const now = Date.now();
+    if (now - draggedBar.lastUpdate < 16) return; // Debounce to ~60fps
+    draggedBar.lastUpdate = now;
+
     const wrapper = document.getElementById(draggedBar.type === 'music' ? 'music-wrapper' : 'broll-wrapper');
     const rect = wrapper.getBoundingClientRect();
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    let position = ((clientX - rect.left) / rect.width) * duration;
-    position = Math.max(0, Math.min(duration, position));
+    const dx = (clientX - draggedBar.startX) * 0.5; // Damping factor for smoother resizing
+    const wrapperWidth = rect.width;
+    const timePerPixel = duration / wrapperWidth;
+    const minDuration = (150 / wrapperWidth) * duration; // Min width of 150px converted to time
+
     if (draggedBar.type === 'music') {
       if (trimSide === 'start') {
-        musicBar.start = Math.min(position, musicBar.end - 1);
+        let newStart = musicBar.start + (dx * timePerPixel);
+        newStart = Math.max(0, Math.min(musicBar.end - minDuration, newStart));
+        musicBar.start = newStart;
       } else {
-        musicBar.end = Math.max(position, musicBar.start + 1);
+        let newEnd = musicBar.end + (dx * timePerPixel);
+        newEnd = Math.min(duration, Math.max(musicBar.start + minDuration, newEnd));
+        musicBar.end = newEnd;
       }
       updateMusicBar();
     } else {
       const broll = brollBars[draggedBar.index];
       if (trimSide === 'start') {
-        broll.start = Math.min(position, broll.end - 1);
+        let newStart = broll.start + (dx * timePerPixel);
+        newStart = Math.max(0, Math.min(broll.end - minDuration, newStart));
+        broll.start = newStart;
       } else {
-        broll.end = Math.max(position, broll.start + 1);
+        let newEnd = broll.end + (dx * timePerPixel);
+        newEnd = Math.min(duration, Math.max(broll.start + minDuration, newEnd));
+        broll.end = newEnd;
       }
       updateBrollBars();
     }
@@ -2482,7 +2556,7 @@ function redo() {
     historyIndex++;
     const nextState = history[historyIndex];
     musicBar = { ...nextState.state.musicBar };
-    brollBars = nextState.state.brollBars ? nextState.state.brollBars.map(b => ({ ...b })) : [];
+    brollBars = prevState.state.brollBars ? prevState.state.brollBars.map(b => ({ ...b })) : [];
     updateMusicBar();
     updateBrollBars();
     deselectBroll();
@@ -2640,7 +2714,8 @@ function handleAddImage(e) {
   const file = e.target.files[0];
   if (file) {
     const name = file.name;
-    brollBars.push({ start: 0, end: duration / 2, name });
+    const url = URL.createObjectURL(file);
+    brollBars.push({ start: 0, end: Math.min(5, duration || 20), name, url });
     saveToHistory('broll', {
       musicBar: { ...musicBar },
       brollBars: brollBars.map(b => ({ ...b }))
