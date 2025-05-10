@@ -703,15 +703,7 @@
       overflow: hidden;
       position: relative;
     }
-        .broll-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  z-index: 1; /* Ensure it’s above the video */
-}
+      
     .preview-video-container.landscape {
       width: 100%;
       height: 454px;
@@ -965,10 +957,11 @@
     }
     .broll-overlay {
   position: absolute;
-  width: 500px;
-  height: 600px;
+  width: 100%;
+  height: 100%;
   z-index: 10; 
   object-position: center;
+  object-fit: contain;
 }
     .preview-generate:hover {
       opacity: 0.75;
